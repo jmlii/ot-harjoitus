@@ -1,0 +1,116 @@
+jmliikan@lx8-fuxi150:~/Documents/Ohte/viikko1$ git log --stat | cat
+commit da2c58a087d1b7b4a1d431545b196019bdb27632
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Thu Mar 12 18:25:22 2020 +0200
+
+    poisto file1 rename file2>file22
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 563c7d5a35f04c3f7e740bf482f68038aa08aca8
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Thu Mar 12 18:16:54 2020 +0200
+
+    lisäys filet 1-3
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit ae4d9f26e1c3fb62b5f6c33d60797c2e39b174f9
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 21:46:31 2020 +0200
+
+    muutoksia eka ja kolmas
+
+ eka.txt    | 8 ++++----
+ kolmas.txt | 4 +++-
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+commit 477f3ef23fe467f102231377dbc06eed3b32455f
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 21:29:10 2020 +0200
+
+    uudelleennimeäminen tiedosto->eka
+
+ tiedosto.txt => eka.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 250bb1a4a5eca7886febe9b2c25f4d8b285dc2e7
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 21:28:03 2020 +0200
+
+    poisto toinen.txt
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit f2f6c0fea5ce292c3b848ac899095857b3726c5e
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 21:24:35 2020 +0200
+
+    tiedostoon lisäyksiä ja poisto
+
+ tiedosto.txt | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+commit c7afe96cd82578185fb253f2d945141271a1e36a
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 21:21:36 2020 +0200
+
+    muutos tiedosto
+
+ tiedosto.txt | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+commit 545cbe7a214cef923bd1be2718188a21065a83b0
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 21:10:11 2020 +0200
+
+    lisäys stuff-kansio ja tiedosto
+
+ stuff/tiedosto.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+commit fcb6848cf8afd6b6929a584e7aa223584d8fea36
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 21:07:07 2020 +0200
+
+    muutoksia toinen ja kolmas
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit bbf2b5f4759d19f42f2a69e1262bd5e407feae18
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 21:06:18 2020 +0200
+
+    lisäys kolmas-tiedosto
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit dc8c01dda27363cd827a602237be8de7f6b59192
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 20:59:59 2020 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit 1a0fd11b4e93dadd1b719eaac74e26fbf98aa926
+Author: jmlii <44909874+jmlii@users.noreply.github.com>
+Date:   Wed Mar 11 20:57:09 2020 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+jmliikan@lx8-fuxi150:~/Documents/Ohte/viikko1$ 
+
