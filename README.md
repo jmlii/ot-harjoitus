@@ -1,11 +1,11 @@
-# Ohjelmistotekniikka-kurssin laskarit
+# Budjetointisovellus BudgetApp 
 
-## Viikko 1
-Viikon 1 laskaritehtävät keskittyivät **komentorivin käyttöön** ja **versionhallintaan *Gitin* ja *GitHubin* avulla**.
+Budjetointisovellus BudgetApp on harjoitustyö Helsingin yliopiston tietojenkäsittelytieteen kurssille ohjelmistotekniikka.
 
-**Tiedostot:**
+Sovelluksen avulla käyttäjä voi luoda oman budjetin ja seurata toteutuneita kuluja. 
 
-[gitlog.txt](https://github.com/jmlii/ot-harjoitus/blob/master/laskarit/viikko1/gitlog.txt)
+## Dokumentaatio
 
-[komentorivi.txt](https://github.com/jmlii/ot-harjoitus/blob/master/laskarit/viikko1/komentorivi.txt)
+[Vaatimusmäärittely](dokumentointi/vaatimusmaarittely.md)
 
+[Työaikakirjanpito](dokumentointi/tyoaikakirjanpito.md)
