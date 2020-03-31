@@ -12,18 +12,12 @@ Sovelluksen avulla käyttäjä voi luoda oman budjetin ja seurata toteutuneita k
 
 ## Komentorivitoiminnot
 
-### Testaus
-Testit suoritetaan komennolla
+### Projektin koodin suorittaminen
+Projektin koodin voi suorittaa komentorivillä komennolla
 ```
-mvn test 
+mvn compile exec:java -Dexec.mainClass=budgetapp.ui.Main
 ```
-
-Testikattavuusraportti luodaan komennolla 
-```
-mvn jacoco:report
-```
-
-Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto *target/site/jacoco/index.html*.
+Projektin koodin voi suorittaa myös esim. NetBeansissa.
 
 ### Suoritettavan jarin generointi
 Suoritettava jar-tiedosto generoidaan komennolla
@@ -34,6 +28,17 @@ Komento luo hakemistoon *target* jar-tiedoston BudgetApp-1.0-SNAPSHOT.jar. Jar-t
 ```
 java -jar target/BudgetApp-1.0-SNAPSHOT.jar
 ```
+
+### Testaus
+Testit suoritetaan komennolla
+```
+mvn test 
+```
+Testikattavuusraportti luodaan komennolla 
+```
+mvn jacoco:report
+```
+Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto *target/site/jacoco/index.html*.
 
 ### JavaDoc
 JavaDocia ei ole vielä lisätty.
