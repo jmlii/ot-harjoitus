@@ -8,6 +8,8 @@ Sovelluksen avulla käyttäjä voi luoda oman budjetin ja seurata toteutuneita k
 
 [Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
 
+[Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
+
 [Työaikakirjanpito](dokumentaatio/tyoaikakirjanpito.md)
 
 ## Komentorivitoiminnot
