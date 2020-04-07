@@ -37,11 +37,11 @@ public class BudgetServiceTest {
     }
 
    
-    @Test
-    public void returnsTransactionReturnsCorrectValue() throws SQLException {
-        TransactionDao tDao = new SQLTransactionDao();
-        CategoryDao cDao = new SQLCategoryDao();
-        BudgetService bs = new BudgetService(cDao, tDao);
-        assertTrue(bs.returnsTransaction(4));
-    }
+//    @Test
+//    public void returnsTransactionReturnsCorrectValue() throws SQLException {
+//        TransactionDao tDao = new SQLTransactionDao();
+//        CategoryDao cDao = new SQLCategoryDao();
+//        BudgetService bs = new BudgetService(cDao, tDao);
+//        assertTrue(bs.returnsTransaction(4));
+//    }
 }

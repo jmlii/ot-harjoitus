@@ -115,6 +115,10 @@ public class SQLCategoryDao implements CategoryDao {
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Category WHERE name = ?");
         stmt.setString(1, categoryName);
         ResultSet rs = stmt.executeQuery();
-        return rs.next();
+        boolean exists = rs.next();
+        stmt.close();
+        rs.close();
+        connection.close();
+        return exists;
     }
 }

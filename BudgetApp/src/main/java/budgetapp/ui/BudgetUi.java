@@ -63,7 +63,7 @@ public class BudgetUi {
     
     private void printInstructions() {
         System.out.println("");
-        System.out.println("Please choose the desired command and press enter. Only 1-3, p and x are in function, other commands are disabled.");
+        System.out.println("Please choose the desired command and press enter. Only 1-4, p and x are in function, other commands are disabled.");
         for (String value : commands.values()) {
             System.out.println(value);   
         }

@@ -17,9 +17,7 @@ import java.util.List;
 
 
 public class BudgetService {
-    
-    private ArrayList<Transaction> transactions;
-    
+        
     private CategoryDao categoryDao;
     private TransactionDao transactionDao;
         
@@ -40,7 +38,6 @@ public class BudgetService {
                 "CREATE TABLE IF NOT EXISTS Transaction ("
                         + "id SERIAL, "
                         + "category_id INTEGER, "
-                        + "name VARCHAR(64), "
                         + "description VARCHAR(64), "
                         + "amount INTEGER, "
                         + "date DATE, "
@@ -51,7 +48,6 @@ public class BudgetService {
         statement2.close();
         connection.close();
         
-        this.transactions = new ArrayList<>();
         addCategories(categoryDao);   
     }
     
@@ -121,11 +117,11 @@ public class BudgetService {
         transaction.setDescription(description);
         transaction.setAmount(amount * -1);
         transaction.setDate(date);
+        transactionDao.update(transaction);
     }
     
     public void deleteTransaction(Integer key) throws SQLException {
         transactionDao.delete(key);
-         
     }
     
     private void addCategories(CategoryDao categoryDao) throws SQLException {
