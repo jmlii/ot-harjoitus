@@ -8,34 +8,21 @@ public class Category implements Comparable<Category> {
     private int id;
     private String name;
     private boolean incomeCategory;
-    private BudgetPlan budgetPlan;
-    
-    public Category(int id, String name, boolean incomeCategory, BudgetPlan budgetPlan) {
-        this.id = id;
-        this.name = name;
-        this.incomeCategory = incomeCategory;
-        this.budgetPlan = budgetPlan;
-    }
-    
+
     public Category(String name) {
-        this.id = 0;
         this.name = name;
         this.incomeCategory = false;
-        this.budgetPlan = null;
     }
     
     public Category(String name, boolean incomeCategory) {
-        this.id = 0;
         this.name = name;
         this.incomeCategory = incomeCategory;
-        this.budgetPlan = null;
     }
     
     public Category(int id, String name, boolean incomeCategory) {
         this.id = id;
         this.name = name;
         this.incomeCategory = incomeCategory;
-        this.budgetPlan = null;
     }
     
     public int getId() {
