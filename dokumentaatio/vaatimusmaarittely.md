@@ -1,7 +1,7 @@
 # Vaatimusmäärittely
 
 ## Sovelluksen tarkoitus
-Tämän budjetointisovelluksen avulla käyttäjä voi luoda oman budjetin ja seurata toteutuneita kuluja. Sovellukseen saatetaan lisätä mahdollisuus, että käyttäjällä voi olla useita toisistaan erillisiä budjetteja, joista jokaiseen liittyy oma kulujen seuranta.
+Tämän budjetointisovelluksen avulla käyttäjä voi luoda oman budjetin ja seurata toteutuneita tuloja ja menoja. Sovellukseen saatetaan lisätä mahdollisuus, että käyttäjällä voi olla useita toisistaan erillisiä budjetteja, joista jokaiseen liittyy oma tapahtumien seuranta.
 
 
 ## Käyttäjät
@@ -12,37 +12,41 @@ Sovelluksella on vain yksi käyttäjärooli eli normaali käyttäjä. Sovellukse
 
 ### Tarkastelunäkymä
 * Tarkastelunäkymä avautuu käyttäjän käynnistäessä sovelluksen.
+* Tapahtumien rivit tulostuvat näytölle kategorioittain.
 * Budjetin rivit tulostuvat näytölle kategorioittan.
-* Käyttäjä voi siirtyä lisäämään budjettiin uuden rivin.
-* Käyttäjä voi siirtyä muokkaamaan budjetin rivejä.
-* Käyttäjä voi poistaa budjetin rivin.
-* Käyttäjä näkee, kuinka paljon hänellä on budjetissa rahaa käytettävissä, budjetoituna, budjetoimatta, käytettynä ja jäljellä käytettäväksi.
+* Käyttäjä voi siirtyä lisäämään budjettiin tai tapahtumiin uuden rivin.
+* Käyttäjä voi siirtyä muokkaamaan budjetin tai tapahtumien rivejä.
+* Käyttäjä voi poistaa budjetin tai taphtumien rivin.
+* Käyttäjä näkee, kuinka paljon hänellä on rahaa käytettävissä, käytettynä ja jäljellä käytettäväksi, sekä budjetissa käytettävissä, budjetoituna ja  budjetoimatta.
 
 ### Tapahtuman lisääminen
 * Käyttäjä voi lisätä tapahtumiin tulorivejä ja menorivejä. (tehty)
-* Käyttäjä antaa kategorian, tarkemman kuvauksen ja syöttää halutun summan ja antaa päivämäärän. (tehty)
+* Tulotapahtumille tulee automaattisesti tulokategoria. (tehty)
+* Menotapahtumille käyttäjä valitsee listalta kategorian ja syöttää tarkemman kuvauksen, halutun summan ja päivämäärän. (tehty)
 
-### Kulutapahtuman muokkaaminen ja poistaminen
+### Tapahtuman muokkaaminen ja poistaminen
 * Käyttäjä voi muuttaa mitä tahansa rivin tietoa. (tehty)
 * Käyttäjä voi poistaa minkä tahansa rivin. (tehty)
 
 ### Budjettikohteen lisääminen
 * Käyttäjä voi lisätä budjettiin tulorivejä, joiden perusteella lasketaan budjetille käytettävissä oleva raha.
-* Budjetoitavalle rahalle käyttäjä antaa kategorian, tarkemman kuvauksen ja syöttää halutun summan joko budjetoitavaksi tai käytetyksi ja antaa käyttökohteelle käyttöpäivämäärän.
+* Budjetoitavalle käyttökohteelle käyttäjä antaa kategorian, tarkemman kuvauksen ja syöttää halutun summan.
 
+### Budjettikohteen muokkaaminen ja poistaminen
+* Käyttäjä voi muuttaa mitä tahansa budjettirivin tietoa.
+* Käyttäjä voi poistaa minkä tahansa budjettirivin.
 
-### Budjettikohteen muokkaaminen
-* Käyttäjä voi muuttaa mitä tahansa rivin tietoa.
-
+### Tietojen tallennus
+* Tapahtumien ja budjetin tiedot tallennetaan tietokantaan. (tehty niiltä osin kuin toiminto toteutettu sovelluksessa)
 
 ## Jatkokehitysideoita
 Sovellusta voidaan täydentää myöhemmin ajan salliessa esimerkiksi seuraavilla ominaisuuksilla ja toiminnallisuuksilla.
 
-* Käyttäjä voi listata budjetin rivit myös käyttöajankohdan mukaan.
+* Käyttäjä voi listata tapahtumat myös käyttöajankohdan mukaan.
 * Budjettiraportti näyttää kategorioittain, kuinka paljon kategorialle budjetoidusta rahasta on käytetty ja käyttämättä.
 * Mahdollisuus tyhjentää kerralla koko budjetti eli kaikki sen rivit.
-* Mahdollisuus lisätä useampia budjetteja, muokata budjettien tietoja ja poistaa budjetteja. 
-* Mahdollisuus lisätä useampia käyttäjiä, joilla jokaisella on oma budjettinsa.
+* Mahdollisuus lisätä useampia budjetteja ja tapahtumaseurantoja, muokata niiden tietoja ja poistaa niitä. 
+* Mahdollisuus lisätä useampia käyttäjiä, joilla jokaisella on oma budjettinsa ja tapahtumaseurantansa.
 * Usean käyttäjän sovellukseen toiminto uuden käyttäjän lisäämiseen, käyttäjien tunnistaminen, sisäänkirjautuminen ja uloskirjautuminen.
 * Usean käyttäjän sovellukseen käyttäjille mahdollisuus muokata omia tietojaan esim. salasanaa.
 * Usean käyttäjän sovellukseen käyttäjille mahdollisuus poistaa oma tunnuksensa ja kaikki siihen liittyvät tiedot.
