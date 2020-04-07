@@ -3,3 +3,8 @@
 /laskarit/viikko2/Unicafe/target/
 /BudgetApp/target/
 /BudgetApp/nbproject/
+/BudgetApp/h2-1.4.199.jar
+/BudgetApp/*.db
+/BudgetApp/*.db.old
+
+
