@@ -4,4 +4,4 @@
 
 Sovelluksen luokkakaavio on seuraava:
 
-![](dokumentaatio/kuvat/luokkakaavio.jpg "Luokkakaavio")
+![](kuvat/luokkakaavio.jpg)
