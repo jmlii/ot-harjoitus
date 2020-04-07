@@ -18,10 +18,17 @@ Sovelluksella on vain yksi käyttäjärooli eli normaali käyttäjä. Sovellukse
 * Käyttäjä voi poistaa budjetin rivin.
 * Käyttäjä näkee, kuinka paljon hänellä on budjetissa rahaa käytettävissä, budjetoituna, budjetoimatta, käytettynä ja jäljellä käytettäväksi.
 
+### Tapahtuman lisääminen
+* Käyttäjä voi lisätä tapahtumiin tulorivejä ja menorivejä. (tehty)
+* Käyttäjä antaa kategorian, tarkemman kuvauksen ja syöttää halutun summan ja antaa päivämäärän. (tehty)
+
+### Kulutapahtuman muokkaaminen ja poistaminen
+* Käyttäjä voi muuttaa mitä tahansa rivin tietoa. (tehty)
+* Käyttäjä voi poistaa minkä tahansa rivin. (tehty)
 
 ### Budjettikohteen lisääminen
 * Käyttäjä voi lisätä budjettiin tulorivejä, joiden perusteella lasketaan budjetille käytettävissä oleva raha.
-* Budjetoitavalle tai käytetylle rahalle käyttäjä antaa kategorian, tarkemman kuvauksen ja syöttää halutun summan joko budjetoitavaksi tai käytetyksi ja antaa käyttökohteelle käyttöpäivämäärän.
+* Budjetoitavalle rahalle käyttäjä antaa kategorian, tarkemman kuvauksen ja syöttää halutun summan joko budjetoitavaksi tai käytetyksi ja antaa käyttökohteelle käyttöpäivämäärän.
 
 
 ### Budjettikohteen muokkaaminen
