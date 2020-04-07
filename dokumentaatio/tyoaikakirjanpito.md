@@ -21,3 +21,4 @@
 | 6.4.  | 3    | SQLDaojen tuonti sovelluslogiikan osaksi, tietokantaan tallennus, testien korjaaminen vastaamaan muuttuneita luokkia
 | 7.4.  | 4    | Lisää toimintoja sovellukseen (tapahtumien muokkaus ja poisto), vanhojen toimintojen parantelu (metodien muokkaus, metodien jako useammaksi erilliseksi metodiksi, daoihin lisämetodeja)
 |       | 1    | Luokkakaavio, projektin hallinto (nimet, gitignoren tarkistus ym.)
+| yht.  | 46   |
