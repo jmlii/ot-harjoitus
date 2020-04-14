@@ -14,7 +14,6 @@ public class Transaction {
     private int amount;
     private LocalDate date;
     
-
     public Transaction(int id, Category category, String description, int amount, LocalDate date) {
         this.id = id;
         this.category = category;

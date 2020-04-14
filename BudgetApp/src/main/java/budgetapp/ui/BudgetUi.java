@@ -1,7 +1,6 @@
 package budgetapp.ui;
 
 import budgetapp.domain.BudgetService;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -33,7 +32,7 @@ public class BudgetUi {
         commands.put("x", "x close");
     }
     
-    public void start() throws SQLException {
+    public void start() throws Exception {
         System.out.println("BudgetApp - Create and master your finance!");       
         printInstructions();
         
@@ -69,11 +68,17 @@ public class BudgetUi {
         }
     }
     
-    private void printRows() throws SQLException {
-        budgetService.printTransactions();
+    private void printRows() throws Exception {
+        if (budgetService.listTransactions().isEmpty()) {
+            System.out.println("No transactions");
+        } else {
+            for (Object o : budgetService.listTransactions()) {
+            System.out.println(o);
+            }
+        }
     }
             
-    private void addIncome() throws SQLException {
+    private void addIncome() throws Exception {
         System.out.println("Please provide a short description and insert the amount and the date.");
         String description = askDescription();
         int amount = askAmount();
@@ -81,7 +86,7 @@ public class BudgetUi {
         budgetService.addIncomeTransaction(description, amount, date);
     }
         
-    private void addExpense() throws SQLException {
+    private void addExpense() throws Exception {
         System.out.println("Please provide a short description and insert the amount and the date.");
         String categoryAsString = askCategory();
         String description = askDescription();
@@ -91,23 +96,9 @@ public class BudgetUi {
         budgetService.addExpenseTransaction(categoryAsString, description, amount, date);
     }
     
-    private void editTransaction() throws SQLException {
+    private void editTransaction() throws Exception {
         System.out.println("Insert the ID number of the transaction to be edited:");
-        int key;
-        while (true) {
-            try {
-                key = Integer.valueOf(scanner.nextLine());
-                if (budgetService.returnsTransaction(key)) {
-                    break;
-                } else {
-                    throw new NullPointerException();
-                }
-            } catch (NumberFormatException nfException) {
-                System.out.println("Please insert a valid number. Number:");
-            } catch (NullPointerException e) {
-                System.out.println("Please insert a valid ID number. Number:");
-            }
-        }
+        int key = getIdInputAndCheckValidity();
         System.out.println("Current information: " + budgetService.getTransaction(key));
         System.out.println("Insert the new information.");
         String categoryAsString;
@@ -125,11 +116,42 @@ public class BudgetUi {
         }
     }
     
-    private String askCategory() throws SQLException {
-        System.out.println("Choose category:");
-        budgetService.showCategories();       
+    private int getIdInputAndCheckValidity() throws Exception {
+        int key;
+        while (true) {
+            try {
+                key = Integer.valueOf(scanner.nextLine());
+                if (budgetService.getTransaction(key) != null ) {
+                    break;
+                } else {
+                    throw new NullPointerException();
+                }
+            } catch (NumberFormatException nfException) {
+                System.out.println("Please insert a number. ID number:");
+            } catch (NullPointerException e) {
+                System.out.println("Please insert a valid ID number. ID number:");
+            }
+        }
+        return key;
+    }
+    
+    private String askCategory() throws Exception {
+        System.out.println("Choose category from the list:");
+        showCategories();       
+        System.out.println("Category:");
         String categoryAsString = scanner.nextLine();
         return categoryAsString;
+    }
+    
+    private void showCategories() throws Exception {
+        if (budgetService.listExpenseCategories().isEmpty()) {
+            System.out.println("No categories");
+        } else {
+            for (Object o : budgetService.listExpenseCategories()) {
+                System.out.println(o);
+            }
+        }
+        System.out.println("");
     }
     
     private String askDescription() {
@@ -167,23 +189,9 @@ public class BudgetUi {
         return date;
     }    
     
-    private void deleteTransaction() throws SQLException {
+    private void deleteTransaction() throws Exception {
         System.out.println("Insert the ID number of the transaction to be deleted:");
-        int key;
-        while (true) {
-            try {
-                key = Integer.valueOf(scanner.nextLine());
-                if (budgetService.returnsTransaction(key)) {
-                    break;
-                } else {
-                    throw new NullPointerException();
-                }
-            } catch (NumberFormatException nfException) {
-                System.out.println("Please insert a valid number. Number:");
-            } catch (NullPointerException e) {
-                System.out.println("Please insert a valid ID number. Number:");
-            }
-        }
+        int key = getIdInputAndCheckValidity();
         System.out.println("You are about to delete: " + budgetService.getTransaction(key));
         System.out.println("Please confirm deletion by inserting 'y' or 'yes' or abort by inserting anything else.");
         String confirmation = scanner.nextLine();
@@ -194,4 +202,5 @@ public class BudgetUi {
             System.out.println("Deletion aborted.");
         }
     }
+    
 }

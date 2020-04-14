@@ -16,16 +16,27 @@ import java.util.List;
  */
 public class SQLTransactionDao implements TransactionDao {
     
-    public Connection createDbConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:h2:./budgetapp", "sa", "");
-        return connection;
+    private Connection connection;
+    private CategoryDao categoryDao;
+    
+    public SQLTransactionDao(Connection connection, CategoryDao categoryDao) throws SQLException {
+        this.connection = connection;
+        this.categoryDao = categoryDao;
+        PreparedStatement stmt = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS Transaction ("
+                        + "id SERIAL, "
+                        + "category_id INTEGER, "
+                        + "description VARCHAR(64), "
+                        + "amount INTEGER, "
+                        + "date DATE, "
+                        + "PRIMARY KEY(id), "
+                        + "FOREIGN KEY (category_id) REFERENCES Category(id))");
+        stmt.executeUpdate();
+        stmt.close();     
     }
-    
-    SQLCategoryDao sqlCategoryDao = new SQLCategoryDao();
-    
+
     @Override
-    public void create(Transaction transaction) throws SQLException {
-        Connection connection = createDbConnection();
+    public void create(Transaction transaction) throws Exception {
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Transaction "
                 + " (category_id, description, amount, date)"
                 + " VALUES (?, ?, ?, ?)");
@@ -35,12 +46,10 @@ public class SQLTransactionDao implements TransactionDao {
         stmt.setObject(4, transaction.getDate());
         stmt.executeUpdate();
         stmt.close();
-        connection.close();
     }
     
     @Override
-    public Transaction read(Integer key) throws SQLException {
-        Connection connection = createDbConnection();
+    public Transaction read(Integer key) throws Exception {
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Transaction WHERE id = ?");
         stmt.setInt(1, key);
         ResultSet rs = stmt.executeQuery();
@@ -48,19 +57,17 @@ public class SQLTransactionDao implements TransactionDao {
             return null;
         }
         Transaction transaction = new Transaction(rs.getInt("id"), 
-                sqlCategoryDao.read(rs.getInt("category_id")),
+                categoryDao.read(rs.getInt("category_id")),
                 rs.getString("description"), 
                 rs.getInt("amount"),
                 rs.getObject("date", LocalDate.class));
         stmt.close();
         rs.close();
-        connection.close();
         return transaction;
     }
     
     @Override
-    public Transaction update(Transaction transaction) throws SQLException {
-        Connection connection = createDbConnection();
+    public Transaction update(Transaction transaction) throws Exception {
         PreparedStatement stmt = connection.prepareStatement("UPDATE Transaction"
                 + " SET category_id = ?, description = ?, amount = ?, date = ?"
                 + " WHERE id = ?");
@@ -71,30 +78,26 @@ public class SQLTransactionDao implements TransactionDao {
         stmt.setInt(5, transaction.getId());
         stmt.executeUpdate();
         stmt.close();
-        connection.close();
         return transaction;
     }
     
     @Override
-    public void delete(Integer key) throws SQLException {
-        Connection connection = createDbConnection();
+    public void delete(Integer key) throws Exception {
         PreparedStatement stmt = connection.prepareStatement("DELETE FROM Transaction"
                 + " WHERE ID = ?");
         stmt.setInt(1, key);
         stmt.executeUpdate();
         stmt.close();
-        connection.close();
     }
     
     @Override
-    public List<Transaction> listAll() throws SQLException {
-        Connection connection = createDbConnection();
+    public List<Transaction> listAll() throws Exception {
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Transaction");
         ResultSet rs = stmt.executeQuery();
         List<Transaction> transactions = new ArrayList<>();
         while (rs.next()) {
             Transaction transaction = new Transaction(rs.getInt("id"), 
-                    sqlCategoryDao.read(rs.getInt("category_id")),
+                    categoryDao.read(rs.getInt("category_id")),
                     rs.getString("description"), 
                     rs.getInt("amount"),
                     rs.getObject("date", LocalDate.class));
@@ -102,13 +105,11 @@ public class SQLTransactionDao implements TransactionDao {
         }
         stmt.close();
         rs.close();
-        connection.close();
         return transactions;
     }
     
     @Override
-    public List<Transaction> listBycategory(Category category) throws SQLException {
-        Connection connection = createDbConnection();
+    public List<Transaction> listByCategory(Category category) throws Exception {
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Transaction"
                 + " WHERE category_id = ?");
         stmt.setInt(1, category.getId());
@@ -116,7 +117,7 @@ public class SQLTransactionDao implements TransactionDao {
         List<Transaction> transactions = new ArrayList<>();
         while (rs.next()) {
             Transaction transaction = new Transaction(rs.getInt("id"), 
-                    sqlCategoryDao.read(rs.getInt("category_id")),
+                    categoryDao.read(rs.getInt("category_id")),
                     rs.getString("description"), 
                     rs.getInt("amount"),
                     rs.getObject("date", LocalDate.class));
@@ -124,7 +125,7 @@ public class SQLTransactionDao implements TransactionDao {
         }
         stmt.close();
         rs.close();
-        connection.close();
         return transactions;
     }
+    
 }

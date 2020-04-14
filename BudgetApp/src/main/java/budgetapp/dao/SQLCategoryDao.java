@@ -2,7 +2,6 @@ package budgetapp.dao;
 
 import budgetapp.domain.Category;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,28 +13,37 @@ import java.util.List;
  */
 public class SQLCategoryDao implements CategoryDao {
     
-    private Connection createDbConnection() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:h2:./budgetapp", "sa", "");
-        return connection;
-    }
+    private Connection connection;
     
+    public SQLCategoryDao(Connection connection) throws SQLException {
+        this.connection = connection; 
+        PreparedStatement stmt = connection.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS Category ("
+                        + "id SERIAL, "
+                        + "name VARCHAR(64), "
+                        + "incomeCategory BOOLEAN NOT NULL, "
+                        + "PRIMARY KEY (id), "
+                        + "UNIQUE (name))");
+        stmt.executeUpdate();   
+        stmt.close();
+    }
     
     @Override
     public void create(Category category) throws SQLException {
-        Connection connection = createDbConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Category"
-                + " (name, incomeCategory)"
-                + " VALUES (?, ?)");
-        stmt.setString(1, category.getName());
-        stmt.setBoolean(2, category.isIncomeCategory());
-        stmt.executeUpdate();
-        stmt.close();
-        connection.close();
+        //if (!nameExists(category.getName())) {
+        if (readFromName(category.getName()) == null) {
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO Category"
+                    + " (name, incomeCategory)"
+                    + " VALUES (?, ?)");
+            stmt.setString(1, category.getName());
+            stmt.setBoolean(2, category.isIncomeCategory());
+            stmt.executeUpdate();
+            stmt.close();            
+        }
     }
     
     @Override
     public Category read(Integer key) throws SQLException {
-        Connection connection = createDbConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Category WHERE id = ?");
         stmt.setInt(1, key);
         ResultSet rs = stmt.executeQuery();
@@ -46,12 +54,11 @@ public class SQLCategoryDao implements CategoryDao {
                 rs.getBoolean("incomeCategory"));
         stmt.close();
         rs.close();
-        connection.close();
         return category;
     }
     
+    @Override
     public Category readFromName(String name) throws SQLException {
-        Connection connection = createDbConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Category WHERE name = ?");
         stmt.setString(1, name);
         ResultSet rs = stmt.executeQuery();
@@ -62,13 +69,11 @@ public class SQLCategoryDao implements CategoryDao {
                 rs.getBoolean("incomeCategory"));
         stmt.close();
         rs.close();
-        connection.close();
         return category;
     }
     
     @Override
     public Category update(Category category) throws SQLException {
-        Connection connection = createDbConnection();
         PreparedStatement stmt = connection.prepareStatement("UPDATE Category"
                 + " SET name = ?, incomeCategory = ?"
                 + " WHERE id = ?");
@@ -77,24 +82,20 @@ public class SQLCategoryDao implements CategoryDao {
         stmt.setInt(3, category.getId());
         stmt.executeUpdate();
         stmt.close();
-        connection.close();
         return category;
     }
     
     @Override
     public void delete(Integer key) throws SQLException {
-        Connection connection = createDbConnection();
         PreparedStatement stmt = connection.prepareStatement("DELETE FROM Category"
                 + " WHERE ID = ?");
         stmt.setInt(1, key);
         stmt.executeUpdate();
         stmt.close();
-        connection.close();
     }
     
     @Override
     public List<Category> listAll() throws SQLException {
-        Connection connection = createDbConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Category");
         ResultSet rs = stmt.executeQuery();
         List<Category> categories = new ArrayList<>();
@@ -105,20 +106,7 @@ public class SQLCategoryDao implements CategoryDao {
         }
         stmt.close();
         rs.close();
-        connection.close();
         return categories;
     }
-        
-    @Override
-    public boolean nameExists(String categoryName) throws SQLException {
-        Connection connection = createDbConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Category WHERE name = ?");
-        stmt.setString(1, categoryName);
-        ResultSet rs = stmt.executeQuery();
-        boolean exists = rs.next();
-        stmt.close();
-        rs.close();
-        connection.close();
-        return exists;
-    }
+
 }

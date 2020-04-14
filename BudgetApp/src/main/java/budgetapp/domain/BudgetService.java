@@ -6,10 +6,6 @@ package budgetapp.domain;
 
 import budgetapp.dao.CategoryDao;
 import budgetapp.dao.TransactionDao;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,53 +16,24 @@ public class BudgetService {
         
     private CategoryDao categoryDao;
     private TransactionDao transactionDao;
-        
-    public BudgetService(CategoryDao categoryDao, TransactionDao transactionDao) throws SQLException {
+
+    public BudgetService(CategoryDao categoryDao, TransactionDao transactionDao) throws Exception {
         this.categoryDao = categoryDao;
         this.transactionDao = transactionDao;
-        Connection connection = DriverManager.getConnection("jdbc:h2:./budgetapp", "sa", "");
-     
-        PreparedStatement statement = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS Category ("
-                        + "id SERIAL, "
-                        + "name VARCHAR(64), "
-                        + "incomeCategory BOOLEAN NOT NULL, "
-                        + "PRIMARY KEY (id), "
-                        + "UNIQUE (name))");
-        statement.executeUpdate();        
-        PreparedStatement statement2 = connection.prepareStatement(
-                "CREATE TABLE IF NOT EXISTS Transaction ("
-                        + "id SERIAL, "
-                        + "category_id INTEGER, "
-                        + "description VARCHAR(64), "
-                        + "amount INTEGER, "
-                        + "date DATE, "
-                        + "PRIMARY KEY(id), "
-                        + "FOREIGN KEY (category_id) REFERENCES Category(id))");
-        statement2.executeUpdate();
-        statement.close();
-        statement2.close();
-        connection.close();
         
         addCategories(categoryDao);   
     }
     
-    public void printTransactions() throws SQLException {
-        if (transactionDao.listAll().isEmpty()) {
-            System.out.println("No transactions");
-        } else {
-            for (Transaction transaction : transactionDao.listAll()) {
-                System.out.println(transaction);
-            }
-        }
+    public List<Transaction> listTransactions() throws Exception {
+        return transactionDao.listAll();
     }
     
-    public void addIncomeTransaction(String description, int amount, LocalDate date) throws SQLException {
+    public void addIncomeTransaction(String description, int amount, LocalDate date) throws Exception {
         Category category = categoryDao.readFromName("Income");
         addTransaction(category, description, amount, date);
     }
     
-    public void addExpenseTransaction(String categoryAsString, String description, int amount, LocalDate date) throws SQLException {
+    public void addExpenseTransaction(String categoryAsString, String description, int amount, LocalDate date) throws Exception {
         int expense = amount * -1;
         Category category = categoryDao.readFromName(categoryAsString);
         if (category == null) {
@@ -75,31 +42,26 @@ public class BudgetService {
         addTransaction(category, description, expense, date);
     }
     
-    public void addTransaction(Category category, String description, int amount, LocalDate date) throws SQLException {
+    public void addTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
         Transaction transaction = new Transaction(category, description, amount, date);
         transactionDao.create(transaction);
     }
     
-    public void showCategories() throws SQLException {
-        if (categoryDao.listAll().isEmpty()) {
-            System.out.println("No categories");
-        } else {
-            for (Category category : categoryDao.listAll()) {
-                System.out.println(category);
+    public List<Category> listExpenseCategories() throws Exception {
+        List<Category> expenseCategories = new ArrayList<>();
+        for (Category category : categoryDao.listAll()) {
+            if (!category.isIncomeCategory()) {
+                expenseCategories.add(category);
             }
         }
-        System.out.println("");
+        return expenseCategories;
     }
     
-    public Transaction getTransaction(Integer key) throws SQLException {
+    public Transaction getTransaction(Integer key) throws Exception {
         return transactionDao.read(key);
     }
     
-    public boolean returnsTransaction(Integer key) throws SQLException {
-        return (transactionDao.read(key) != null);
-    }
-    
-    public void editIncomeTransaction(Integer key, String description, int amount, LocalDate date) throws SQLException {
+    public void editIncomeTransaction(Integer key, String description, int amount, LocalDate date) throws Exception {
         Transaction transaction = transactionDao.read(key);
         transaction.setDescription(description);
         transaction.setAmount(amount);
@@ -107,7 +69,7 @@ public class BudgetService {
         transactionDao.update(transaction);
     }
     
-    public void editExpenseTransaction(Integer key, String categoryAsString, String description, int amount, LocalDate date) throws SQLException {
+    public void editExpenseTransaction(Integer key, String categoryAsString, String description, int amount, LocalDate date) throws Exception, Exception {
         Transaction transaction = transactionDao.read(key);
         Category category = categoryDao.readFromName(categoryAsString);
         if (category == null) {
@@ -120,17 +82,14 @@ public class BudgetService {
         transactionDao.update(transaction);
     }
     
-    public void deleteTransaction(Integer key) throws SQLException {
+    public void deleteTransaction(Integer key) throws Exception {
         transactionDao.delete(key);
     }
     
-    private void addCategories(CategoryDao categoryDao) throws SQLException {
+    private void addCategories(CategoryDao categoryDao) throws Exception {
         List<Category> categories = createCategoryList();
         for (Category category : categories) {
-            String name = category.getName();
-            if (!categoryDao.nameExists(name)) {
-                categoryDao.create(category);
-            }
+            categoryDao.create(category);
         }
     }
     
@@ -149,7 +108,7 @@ public class BudgetService {
         categories.add(new Category("Savings and investments"));
         Collections.sort(categories);
         categories.add(0, new Category("Income", true));
-        categories.add(new Category("Others"));
+        categories.add(new Category("Other"));
         categories.add(new Category("Unknown"));
         return categories;
     }

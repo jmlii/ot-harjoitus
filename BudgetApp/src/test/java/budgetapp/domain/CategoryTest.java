@@ -15,6 +15,8 @@ import java.util.Collections;
 
 public class CategoryTest {
     
+    Category category1, category2, category3;
+    
     public CategoryTest() {
     }
     
@@ -28,6 +30,9 @@ public class CategoryTest {
     
     @Before
     public void setUp() {
+        category1 = new Category(1, "test", true);
+        category2 = new Category(2, "anotherTest", false);
+        category3 = new Category("yetAnother");
     }
     
     @After
@@ -36,84 +41,75 @@ public class CategoryTest {
     
     @Test
     public void constructorSetsIncomeAsFalseIfInformationNotGiven() {
-        Category category = new Category("TestCategory");
-        assertEquals(false, category.isIncomeCategory());
+        assertEquals(false, category3.isIncomeCategory());
     }
     
     @Test
     public void setIncomeCategorySetsCorrecttBooleanValue() {
-        Category category = new Category("test", false);
-        category.setIncomeCategory(true);
-        assertTrue(category.isIncomeCategory());
+        category2.setIncomeCategory(true);
+        assertTrue(category2.isIncomeCategory());
     }
     
     @Test
     public void setIncomeCategoryTrueSetsCorrectBooleanValue() {
-        Category category = new Category("test", false);
-        category.setIncomeCategoryTrue();
-        assertTrue(category.isIncomeCategory());
+        category2.setIncomeCategoryTrue();
+        assertTrue(category2.isIncomeCategory());
     }
     
     @Test
     public void setIncomeCategoryFalseSetsCorrectBooleanValue() {
-        Category category = new Category("test", true);
-        category.setIncomeCategoryFalse();
-        assertFalse(category.isIncomeCategory());
+        category1.setIncomeCategoryFalse();
+        assertFalse(category1.isIncomeCategory());
     }
     
     @Test
     public void categoriesAreSortedInRightAlphabeticalOrder() {
-        Category category1 = new Category(1, "test", true);
-        Category category2 = new Category(3, "other", false);
-        Category category3 = new Category(5, "new", false);
         ArrayList<Category> categories = new ArrayList<>();
         categories.add(category1);
         categories.add(category2);
         categories.add(category3);
         Collections.sort(categories);
-        assertEquals("[new, other, test]", categories.toString());
+        assertEquals("[anotherTest, test, yetAnother]", categories.toString());
     }
 
     @Test
     public void equalWhenSameIdAndNameAndIncomeCategoryValue() {
-        Category category1 = new Category(1, "test", false);
-        Category category2 = new Category(1, "test", false);
-        assertTrue(category1.equals(category2));
+        Category new1 = new Category(1, "test", false);
+        Category new2 = new Category(1, "test", false);
+        assertTrue(new1.equals(new2));
     }
     
     @Test
     public void notEqualWhenDifferentIdSameNameSameIncomeCategoryValue() {
-        Category category1 = new Category(1, "test", false);
-        Category category2 = new Category(2, "test", false);
-        assertFalse(category1.equals(category2));
+        Category new1 = new Category(1, "test", false);
+        Category new2 = new Category(2, "test", false);
+        assertFalse(new1.equals(new2));
     }
     
     @Test
     public void notEqualWhenSameIdDifferentNameSameIncomeCategoryValue() {
-        Category category1 = new Category(1, "test", false);
-        Category category2 = new Category(1, "testOther", false);
-        assertFalse(category1.equals(category2));
+        Category new1 = new Category(1, "test", false);
+        Category new2 = new Category(1, "testOther", false);
+        assertFalse(new1.equals(new2));
     }
     
     @Test
     public void notEqualWhenSameIdSameNameDifferentIncomeCategoryValue() {
-        Category category1 = new Category(1, "test", true);
-        Category category2 = new Category(1, "test", false);
-        assertFalse(category1.equals(category2));
+        Category new1 = new Category(1, "test", true);
+        Category new2 = new Category(1, "test", false);
+        assertFalse(new1.equals(new2));
     } 
     
     @Test
     public void nonEqualWhenDifferentType() {
-        Category category = new Category(1, "test", true);
         Object o = new Object();
-        assertFalse(category.equals(o));
+        assertFalse(category1.equals(o));
     }
     
     @Test 
     public void EqualWhenSameObject() {
-        Category category1 = new Category("test", true);
-        Category category2 = category1;
-        assertTrue(category1.equals(category2));
+        Category test = category1;
+        assertTrue(test.equals(category1));
     }
 
 }
