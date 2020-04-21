@@ -2,7 +2,7 @@
 
 Budjetointisovellus BudgetApp on harjoitustyö Helsingin yliopiston tietojenkäsittelytieteen kurssille ohjelmistotekniikka.
 
-Sovelluksen avulla käyttäjä voi luoda oman budjetin ja seurata toteutuneita kuluja. 
+Sovelluksen avulla käyttäjä voi seurata toteutuneita tulojaan ja menojaan tai suunnitella talouttaan. 
 
 ## Dokumentaatio
 
