@@ -23,7 +23,7 @@
 |       | 1    | Luokkakaavio, projektin hallinto (nimet, gitignoren tarkistus ym.)
 | 8.4.  | 1    | Korjauksia luokkiin ja dokumentteihin
 | 11.4. | 3    | Injektioiden lisämuokkaukset, tietokanta konfiguraatioihin, näiden aiheuttamat muutokset luokkiin
-| 11.4. | 3    | Fake-daot, lisää testejä
+|       | 3    | Fake-daot, lisää testejä
 | 12.4. | 4    | Lisää testejä
 | 13.4. | 3    | Lisää testejä, pieniä muutoksia sovelluksen luokkiin
 | 14.4. | 2    | Lisää testejä
