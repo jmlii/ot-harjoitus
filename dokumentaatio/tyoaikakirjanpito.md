@@ -21,4 +21,16 @@
 | 6.4.  | 3    | SQLDaojen tuonti sovelluslogiikan osaksi, tietokantaan tallennus, testien korjaaminen vastaamaan muuttuneita luokkia
 | 7.4.  | 4    | Lisää toimintoja sovellukseen (tapahtumien muokkaus ja poisto), vanhojen toimintojen parantelu (metodien muokkaus, metodien jako useammaksi erilliseksi metodiksi, daoihin lisämetodeja)
 |       | 1    | Luokkakaavio, projektin hallinto (nimet, gitignoren tarkistus ym.)
-| yht.  | 46   |
+| 8.4.  | 1    | Korjauksia luokkiin ja dokumentteihin
+| 11.4. | 3    | Injektioiden lisämuokkaukset, tietokanta konfiguraatioihin, näiden aiheuttamat muutokset luokkiin
+| 11.4. | 3    | Fake-daot, lisää testejä
+| 12.4. | 4    | Lisää testejä
+| 13.4. | 3    | Lisää testejä, pieniä muutoksia sovelluksen luokkiin
+| 14.4. | 2    | Lisää testejä
+| 16.4. | 4    | Graafinen käyttöliittymä, ensimmäiset näkymät
+| 17.4. | 4    | Graafinen käyttöliittymä lisää näkymiä ja toimintoja
+| 18.4. | 5    | Graafinen käyttöliittymä, mm. tapahtumalistaus ja sen toiminta oikein
+| 19.4. | 5    | Graafinen käyttöliittymä: mm. summat aloitusnäyttöön + niiden päivitys muutoksissa
+| 20.4. | 5    | Graafisen käyttöliittymän muutokset
+| 21.4. | 4    | Koodin siistiminen, dokumentaatio (muutokset vaatimusmäärittelyyn, sekvenssikaaviot, luokkakaavion päivitys, muutokset arkkitehtuurikuvaukseen)
+| yht.  | 89   |
