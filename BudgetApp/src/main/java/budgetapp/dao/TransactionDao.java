@@ -12,4 +12,5 @@ public interface TransactionDao {
     void delete(Integer key) throws Exception;
     List<Transaction> listAll() throws Exception;
     List<Transaction> listByCategory(Category category) throws Exception;
+    List<Transaction> listInDateOrder() throws Exception;
 }

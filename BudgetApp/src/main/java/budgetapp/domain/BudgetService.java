@@ -1,7 +1,7 @@
 package budgetapp.domain;
 
 /**
- * Sovelluslogiikasta vastaava luokka
+ * Class for application logic
  */
 
 import budgetapp.dao.CategoryDao;
@@ -26,6 +26,10 @@ public class BudgetService {
     
     public List<Transaction> listTransactions() throws Exception {
         return transactionDao.listAll();
+    }
+    
+    public List<Transaction> listTransactionsInDateOrder() throws Exception {
+        return transactionDao.listInDateOrder();
     }
     
     public void addIncomeTransaction(String description, int amount, LocalDate date) throws Exception {
@@ -57,6 +61,11 @@ public class BudgetService {
         return expenseCategories;
     }
     
+    public List<Category> listAllCategories() throws Exception {
+        List<Category> categories = categoryDao.listAll();
+        return categories;
+    }
+    
     public Transaction getTransaction(Integer key) throws Exception {
         return transactionDao.read(key);
     }
@@ -69,7 +78,7 @@ public class BudgetService {
         transactionDao.update(transaction);
     }
     
-    public void editExpenseTransaction(Integer key, String categoryAsString, String description, int amount, LocalDate date) throws Exception, Exception {
+    public void editExpenseTransaction(Integer key, String categoryAsString, String description, int amount, LocalDate date) throws Exception {
         Transaction transaction = transactionDao.read(key);
         Category category = categoryDao.readFromName(categoryAsString);
         if (category == null) {
@@ -84,6 +93,44 @@ public class BudgetService {
     
     public void deleteTransaction(Integer key) throws Exception {
         transactionDao.delete(key);
+    }
+    
+    public int getIncomeSum() throws Exception {
+        Category income = categoryDao.readFromName("Income");
+        List<Transaction> incomeTransactions = transactionDao.listByCategory(income);
+        int incomeSum = 0;
+        for (Transaction t : incomeTransactions) {
+            incomeSum += t.getAmount();
+        }
+        return incomeSum;
+    }
+    
+    public int getExpensesSum() throws Exception {
+        int expensesSum = 0; 
+        for (Transaction t : transactionDao.listAll()) {
+            if (!t.getCategory().isIncomeCategory()) {
+                expensesSum += t.getAmount();
+            }
+        }
+        return expensesSum;
+    }
+    
+    public int getBalance() throws Exception {
+        int balance = 0;
+        for (Transaction t : transactionDao.listAll()) {
+            balance += t.getAmount();
+        }
+        return balance;
+    }
+    
+    public int getCategorySum(Category category) throws Exception {
+        int sum = 0;
+        for (Transaction t : transactionDao.listAll()) {
+            if (t.getCategory().equals(category)) {
+                sum += t.getAmount();
+            }
+        }
+        return sum;
     }
     
     private void addCategories(CategoryDao categoryDao) throws Exception {

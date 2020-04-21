@@ -2,6 +2,7 @@ package budgetapp.domain;
 
 import budgetapp.dao.TransactionDao;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -67,5 +68,12 @@ public class FakeTransactionDao implements TransactionDao {
         }
         return byCategory;
     }
+
+    @Override
+    public List<Transaction> listInDateOrder() throws Exception {
+        Collections.sort(transactions);
+        return transactions;
+    }
        
+    
 }

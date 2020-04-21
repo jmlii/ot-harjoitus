@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 /**
- * Sovelluksen tekstikäyttöliittymä; graafinen käyttöliittymä tehdään myöhemmin
+ * Text-based user interface for testing the first features; will be left out from the final application
  */
 
 public class BudgetUi {
@@ -87,7 +87,7 @@ public class BudgetUi {
     }
         
     private void addExpense() throws Exception {
-        System.out.println("Please provide a short description and insert the amount and the date.");
+        System.out.println("Please choose a category, provide a short description and insert the amount and the date.");
         String categoryAsString = askCategory();
         String description = askDescription();
         int amount = askAmount();

@@ -1,7 +1,7 @@
 package budgetapp.domain;
 
 /**
- * Budjetin kategoriaa kuvaava luokka
+ * Class for category
  */
 
 public class Category implements Comparable<Category> {

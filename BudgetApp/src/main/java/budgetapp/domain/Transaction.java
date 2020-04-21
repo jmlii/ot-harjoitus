@@ -3,10 +3,10 @@ package budgetapp.domain;
 import java.time.LocalDate;
 
 /**
- * Tapahtumia kuvaava luokka
+ * Class for transaction
  */
 
-public class Transaction {
+public class Transaction implements Comparable<Transaction> {
     
     private int id;
     private Category category;
@@ -68,6 +68,12 @@ public class Transaction {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+    
+    @Override
+    public int compareTo(Transaction otherTransaction) {
+        return otherTransaction.date.compareTo(this.date);
+    }
+
     
     @Override
     public String toString() {

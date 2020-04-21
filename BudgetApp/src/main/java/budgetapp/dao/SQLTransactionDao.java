@@ -3,7 +3,6 @@ package budgetapp.dao;
 import budgetapp.domain.Category;
 import budgetapp.domain.Transaction;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -113,6 +112,25 @@ public class SQLTransactionDao implements TransactionDao {
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Transaction"
                 + " WHERE category_id = ?");
         stmt.setInt(1, category.getId());
+        ResultSet rs = stmt.executeQuery();
+        List<Transaction> transactions = new ArrayList<>();
+        while (rs.next()) {
+            Transaction transaction = new Transaction(rs.getInt("id"), 
+                    categoryDao.read(rs.getInt("category_id")),
+                    rs.getString("description"), 
+                    rs.getInt("amount"),
+                    rs.getObject("date", LocalDate.class));
+            transactions.add(transaction);
+        }
+        stmt.close();
+        rs.close();
+        return transactions;
+    }
+    
+    @Override
+    public List<Transaction> listInDateOrder() throws Exception  {
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Transaction"
+                + " ORDER BY date DESC");
         ResultSet rs = stmt.executeQuery();
         List<Transaction> transactions = new ArrayList<>();
         while (rs.next()) {

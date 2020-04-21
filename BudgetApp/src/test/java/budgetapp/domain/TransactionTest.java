@@ -7,6 +7,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Budjetin riviä kuvaavan luokan testit
@@ -47,6 +49,21 @@ public class TransactionTest {
     @Test
     public void ToStringReturnsCorrectFormat() {
         assertEquals("0, Income, salary, 3000, 2020-03-02", transaction.toString());
+    }
+    
+    @Test
+    public void transactionsAreSortedInDateOrderNewestFirst() {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        transactions.add(transaction);
+        transactions.add(new Transaction(new Category("Housing"), "rent", 300, LocalDate.of(2020, 03, 10)));
+        transactions.add(new Transaction(new Category("Housing"), "rent", 300, LocalDate.of(2020, 02, 28)));
+        transactions.add(new Transaction(new Category("Housing"), "rent", 300, LocalDate.of(2020, 03, 05)));
+        Collections.sort(transactions);
+        ArrayList<String> dates = new ArrayList<>();
+        for (Transaction t : transactions) {
+            dates.add(t.getDate().toString());
+        }
+        assertEquals("[2020-03-10, 2020-03-05, 2020-03-02, 2020-02-28]", dates.toString());
     }
 
 }
