@@ -12,6 +12,10 @@ Sovelluksen avulla käyttäjä voi luoda oman budjetin ja seurata toteutuneita k
 
 [Työaikakirjanpito](dokumentaatio/tyoaikakirjanpito.md)
 
+## Releaset
+
+[versio 0.1 (pre-release) - viikko 5](https://github.com/jmlii/ot-harjoitus/releases/tag/v0.1)
+
 ## Komentorivitoiminnot
 
 ### Projektin koodin suorittaminen
