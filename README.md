@@ -1,4 +1,4 @@
-# Budjetointisovellus BudgetApp 
+# BudgetApp: sovellus oman talouden seurantaan ja suunnitteluun
 
 Budjetointisovellus BudgetApp on harjoitustyö Helsingin yliopiston tietojenkäsittelytieteen kurssille ohjelmistotekniikka.
 
