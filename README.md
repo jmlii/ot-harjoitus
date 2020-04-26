@@ -46,8 +46,12 @@ mvn jacoco:report
 ```
 Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto *target/site/jacoco/index.html*.
 
-### JavaDoc
-JavaDocia ei ole vielä lisätty.
+### Javadoc
+Javadoc generoidaan komennolla
+```
+mvn javadoc:javadoc
+```
+Javadocia voi tarkastella avaamalla selaimella tiedosto *target/site/apidocs/index.html*.
 
 ### Checkstyle
 Tiedoston checkstyle.xml määrittelemät tarkistukset suoritetaan komennolla
