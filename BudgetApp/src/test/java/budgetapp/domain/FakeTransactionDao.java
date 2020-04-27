@@ -59,14 +59,14 @@ public class FakeTransactionDao implements TransactionDao {
     }
 
     @Override
-    public List<Transaction> listByCategory(Category category) throws Exception {
-        List<Transaction> byCategory = new ArrayList<>();
+    public List<Transaction> listFromCategory(Category category) throws Exception {
+        List<Transaction> fromCategory = new ArrayList<>();
         for (Transaction t : transactions) {
             if (t.getCategory().equals(category)) {
-                byCategory.add(t);
+                fromCategory.add(t);
             }
         }
-        return byCategory;
+        return fromCategory;
     }
 
     @Override

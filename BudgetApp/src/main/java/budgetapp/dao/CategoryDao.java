@@ -1,11 +1,10 @@
 package budgetapp.dao;
 
 import budgetapp.domain.Category;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
- * 
+ * DAO pattern interface for Category class, serves between application logic and concrete DAO class
  */
 public interface CategoryDao {
     void create(Category category) throws Exception;

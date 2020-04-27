@@ -1,9 +1,5 @@
 package budgetapp.domain;
 
-/**
- * Class for application logic
- */
-
 import budgetapp.dao.CategoryDao;
 import budgetapp.dao.TransactionDao;
 import java.time.LocalDate;
@@ -12,11 +8,20 @@ import java.util.Collections;
 import java.util.List;
 
 
+/**
+ * Class for application logic
+ */
 public class BudgetService {
         
     private CategoryDao categoryDao;
     private TransactionDao transactionDao;
 
+    /**
+     * Constructor for the application service class also sets up the category list defined in this class and saves categories to the database if they are not there yet.
+     * @param categoryDao CategoryDao object defined in the application initialization
+     * @param transactionDao TransactionDao object defined in the application initialization
+     * @throws Exception On error with Dao-objects
+     */
     public BudgetService(CategoryDao categoryDao, TransactionDao transactionDao) throws Exception {
         this.categoryDao = categoryDao;
         this.transactionDao = transactionDao;
@@ -24,32 +29,23 @@ public class BudgetService {
         addCategories(categoryDao);   
     }
     
+    // this method is currently not in use but is kept here for possible future use
     public List<Transaction> listTransactions() throws Exception {
         return transactionDao.listAll();
+    }
+                
+    public List<Transaction> listTransactionsFromCategory(Category category) throws Exception {
+        return transactionDao.listFromCategory(category);
     }
     
     public List<Transaction> listTransactionsInDateOrder() throws Exception {
         return transactionDao.listInDateOrder();
     }
-    
-    public void addIncomeTransaction(String description, int amount, LocalDate date) throws Exception {
-        Category category = categoryDao.readFromName("Income");
-        addTransaction(category, description, amount, date);
-    }
-    
-    public void addExpenseTransaction(String categoryAsString, String description, int amount, LocalDate date) throws Exception {
-        int expense = amount * -1;
-        Category category = categoryDao.readFromName(categoryAsString);
-        if (category == null) {
-            category = categoryDao.readFromName("Unknown");
-        } 
-        addTransaction(category, description, expense, date);
-    }
-    
-    public void addTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
-        Transaction transaction = new Transaction(category, description, amount, date);
-        transactionDao.create(transaction);
-    }
+
+    public List<Category> listAllCategories() throws Exception {
+        List<Category> categories = categoryDao.listAll();
+        return categories;
+    }    
     
     public List<Category> listExpenseCategories() throws Exception {
         List<Category> expenseCategories = new ArrayList<>();
@@ -61,11 +57,25 @@ public class BudgetService {
         return expenseCategories;
     }
     
-    public List<Category> listAllCategories() throws Exception {
-        List<Category> categories = categoryDao.listAll();
-        return categories;
+    public void addIncomeTransaction(String description, int amount, LocalDate date) throws Exception {
+        Category category = categoryDao.readFromName("Income");
+        addTransaction(category, description, amount, date);
     }
     
+    public void addExpenseTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
+        int expense = amount * -1;
+        if (category == null) {
+            category = categoryDao.readFromName("Unknown");
+        } 
+        addTransaction(category, description, expense, date);
+    }
+    
+    public void addTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
+        Transaction transaction = new Transaction(category, description, amount, date);
+        transactionDao.create(transaction);
+    }
+
+    // this method is currently not in use but is kept here for possible future use
     public Transaction getTransaction(Integer key) throws Exception {
         return transactionDao.read(key);
     }
@@ -78,9 +88,8 @@ public class BudgetService {
         transactionDao.update(transaction);
     }
     
-    public void editExpenseTransaction(Integer key, String categoryAsString, String description, int amount, LocalDate date) throws Exception {
+    public void editExpenseTransaction(Integer key, Category category, String description, int amount, LocalDate date) throws Exception {
         Transaction transaction = transactionDao.read(key);
-        Category category = categoryDao.readFromName(categoryAsString);
         if (category == null) {
             category = categoryDao.readFromName("Unknown");
         } 
@@ -97,7 +106,7 @@ public class BudgetService {
     
     public int getIncomeSum() throws Exception {
         Category income = categoryDao.readFromName("Income");
-        List<Transaction> incomeTransactions = transactionDao.listByCategory(income);
+        List<Transaction> incomeTransactions = transactionDao.listFromCategory(income);
         int incomeSum = 0;
         for (Transaction t : incomeTransactions) {
             incomeSum += t.getAmount();

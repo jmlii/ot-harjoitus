@@ -176,10 +176,8 @@ public class BudgetGui extends Application {
     // Compilation and updating of transaction list rows for single category:
     public void listTransactionsFromCategory(Category category, Stage primaryStage) throws Exception {
         transactionNodes.getChildren().clear();
-        for (Transaction t : budgetService.listTransactionsInDateOrder()) {
-            if (t.getCategory().equals(category)) {
-                transactionNodes.getChildren().add(transactionNode(t, primaryStage));
-            }
+        for (Transaction t : budgetService.listTransactionsFromCategory(category)) {
+            transactionNodes.getChildren().add(transactionNode(t, primaryStage));
         }
     }
     
@@ -248,7 +246,7 @@ public class BudgetGui extends Application {
         transactionForm.setHgap(10);
         
         saveButton.setOnAction((event) -> {
-            String categoryName = "";
+            Category category = null;
             String description = "";
             int amount = 0;
             LocalDate date = null;                             
@@ -259,7 +257,7 @@ public class BudgetGui extends Application {
                     categoryErrorMessage.setText("Please choose a category.");
                     errorsOnForm = true;
                 } else {
-                    categoryName = categoryComboBox.getValue().toString();
+                    category = (Category) categoryComboBox.getValue();
                     categoryErrorMessage.setText("");
                 }
             }
@@ -295,7 +293,7 @@ public class BudgetGui extends Application {
                 }
                 if (form.equals("newExpense")) {
                     try {
-                        budgetService.addExpenseTransaction(categoryName, description, amount, date);
+                        budgetService.addExpenseTransaction(category, description, amount, date);
                         updateSituation();
                     } catch (Exception ex) {
                         Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
@@ -303,7 +301,7 @@ public class BudgetGui extends Application {
                 }
                 if (form.equals("editTransaction") && (transaction != null && !transaction.getCategory().isIncomeCategory())) {
                     try {
-                        budgetService.editExpenseTransaction(transaction.getId(), categoryName, description, amount, date);
+                        budgetService.editExpenseTransaction(transaction.getId(), category, description, amount, date);
                     } catch (Exception ex) {
                         Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
                     }

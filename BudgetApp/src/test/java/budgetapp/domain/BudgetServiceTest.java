@@ -1,7 +1,6 @@
 package budgetapp.domain;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -69,7 +68,8 @@ public class BudgetServiceTest {
     
     @Test
     public void addExpenseTransactionAddsExpenseCorrectly() throws Exception {
-        service.addExpenseTransaction("Other", "testExpense", 200, LocalDate.of(1970, 01, 01));
+        
+        service.addExpenseTransaction(categoryDao.readFromName("Other"), "testExpense", 200, LocalDate.of(1970, 01, 01));
         assertEquals(1, service.listTransactions().size());
         Transaction t = service.listTransactions().get(0);
         assertEquals("Other", t.getCategory().toString());
@@ -80,7 +80,7 @@ public class BudgetServiceTest {
     
     @Test
     public void addExpenseTransactionSetsCategoryAsUnknownIfGivenCategoryNotInTheList() throws Exception {
-        service.addExpenseTransaction("FakeCategory", "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("FakeCategory"), "testExpense", 200, LocalDate.of(1970, 01, 01));
         assertEquals(1, service.listTransactions().size());
         Transaction t = service.listTransactions().get(0);
         assertEquals("Unknown", t.getCategory().toString());
@@ -92,16 +92,16 @@ public class BudgetServiceTest {
     @Test
     public void getTransactionReturnsCorrectTransaction() throws Exception {
         service.addIncomeTransaction("testIncome", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("Other", "testExpense", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("FakeCategory", "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("Other"), "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("FakeCategory"), "testExpense", 200, LocalDate.of(1970, 01, 01));
         assertEquals("2, Other, testExpense, -200, 1970-01-01", service.getTransaction(2).toString());
     }
     
     @Test
     public void editIncomeTransactionUpdatesCorrectTransaction() throws Exception {
         service.addIncomeTransaction("testIncome", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("Other", "testExpense", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("FakeCategory", "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("Other"), "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("FakeCategory"), "testExpense", 200, LocalDate.of(1970, 01, 01));
         service.editIncomeTransaction(1, "edited testIncome", 150, LocalDate.of(1970, 01, 31));
         assertEquals("1, Income, edited testIncome, 150, 1970-01-31", service.getTransaction(1).toString());
     }
@@ -109,8 +109,8 @@ public class BudgetServiceTest {
     @Test
     public void editIncomeTransactionEditsTransaction() throws Exception {
         service.addIncomeTransaction("testIncome", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("Other", "testExpense", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("FakeCategory", "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("Other"), "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("FakeCategory"), "testExpense", 200, LocalDate.of(1970, 01, 01));
         String transaction1BeforeEditing = service.getTransaction(1).toString();
         service.editIncomeTransaction(1, "edited testIncome", 150, LocalDate.of(1970, 01, 31));
         assertEquals(false, transaction1BeforeEditing.equals(service.getTransaction(1).toString()));
@@ -119,36 +119,36 @@ public class BudgetServiceTest {
     @Test
     public void editExpenseTransactionEditsCorrectTransaction() throws Exception {
         service.addIncomeTransaction("testIncome", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("Other", "testExpense", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("FakeCategory", "testExpense", 200, LocalDate.of(1970, 01, 01));
-        service.editExpenseTransaction(2, "Unknown", "edited testExpense", 120, LocalDate.of(1970, 01, 31));
+        service.addExpenseTransaction(categoryDao.readFromName("Other"), "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("FakeCategory"), "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.editExpenseTransaction(2, categoryDao.readFromName("Unknown"), "edited testExpense", 120, LocalDate.of(1970, 01, 31));
         assertEquals("2, Unknown, edited testExpense, -120, 1970-01-31", service.getTransaction(2).toString());
     }
     
     @Test
     public void editExpenseTransactionEditsTransaction() throws Exception {
         service.addIncomeTransaction("testIncome", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("Other", "testExpense", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("FakeCategory", "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("Other"), "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("FakeCategory"), "testExpense", 200, LocalDate.of(1970, 01, 01));
         String transaction2BeforeEditing = service.getTransaction(2).toString();
-        service.editExpenseTransaction(2, "Unknown", "edited testExpense", 120, LocalDate.of(1970, 01, 31));
+        service.editExpenseTransaction(2, categoryDao.readFromName("Unknown"), "edited testExpense", 120, LocalDate.of(1970, 01, 31));
         assertEquals(false, transaction2BeforeEditing.equals(service.getTransaction(2).toString()));
     }
     
     @Test
     public void editExpenseTransactionSetsCategoryAsUnknownIfGivenCategoryNotInTheList() throws Exception {
         service.addIncomeTransaction("testIncome", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("Other", "testExpense", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("FakeCategory", "testExpense", 200, LocalDate.of(1970, 01, 01));
-        service.editExpenseTransaction(3, "AnotherFakeCategory", "edited testExpense", 120, LocalDate.of(1970, 01, 31));
+        service.addExpenseTransaction(categoryDao.readFromName("Other"), "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("FakeCategory"), "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.editExpenseTransaction(3, categoryDao.readFromName("AnotherFakeCategory"), "edited testExpense", 120, LocalDate.of(1970, 01, 31));
         assertEquals("Unknown", service.getTransaction(3).getCategory().toString());
     }
     
     @Test
     public void deleteTransactionDeletesCorrectTransaction() throws Exception {
         service.addIncomeTransaction("testIncome", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("Other", "testExpense", 200, LocalDate.of(1970, 01, 01));
-        service.addExpenseTransaction("FakeCategory", "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("Other"), "testExpense", 200, LocalDate.of(1970, 01, 01));
+        service.addExpenseTransaction(categoryDao.readFromName("FakeCategory"), "testExpense", 200, LocalDate.of(1970, 01, 01));
         service.deleteTransaction(2);
         assertEquals(null, service.getTransaction(2));
         assertTrue(service.getTransaction(1) != null);

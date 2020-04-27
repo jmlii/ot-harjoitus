@@ -3,7 +3,6 @@ package budgetapp.domain;
 /**
  * Class for category
  */
-
 public class Category implements Comparable<Category> {
     private int id;
     private String name;
@@ -62,11 +61,21 @@ public class Category implements Comparable<Category> {
         return name;
     }
     
+    /**
+     * Compares the category with a given category by their names, can be used for setting categories in alphabetical order
+     * @param otherCategory the category to be compared with
+     * @return value 0 if category names are equal, value less than 0 if the name of this category is before the name of the otherCategory in alphabetical order,  and value greater than 0 if the name of this category is later than the name of the otherCategory in alphabetical order
+     */
     @Override
     public int compareTo(Category otherCategory) {
         return this.name.compareTo(otherCategory.name);
     }
     
+    /**
+     * Checks whether two categories have the same properties and are thus equal
+     * @param o the object to be compared with
+     * @return true if o is an instance of Category class and has the same id and same name as this category and either both are incomeCategories or neither is, otherwise false
+     */
     @Override
     public boolean equals(Object o) {
         if (o == this) {

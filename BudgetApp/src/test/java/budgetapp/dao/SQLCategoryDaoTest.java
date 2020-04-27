@@ -15,7 +15,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * 
+ * JUnit tests for SQLCategoryDao class
  */
 public class SQLCategoryDaoTest {
     
@@ -31,12 +31,12 @@ public class SQLCategoryDaoTest {
     
     @AfterClass
     public static void tearDownClass() {
-       //DeleteDbFiles.execute("./", "testdatabase", true);
     }
     
     @Before
     public void setUp() throws SQLException, Exception {
-        //connection = DriverManager.getConnection("jdbc:h2:./testFolder/testdatabase", "sa", "");
+        // Tests use H2 in-memory database, not the actual database which the application uses 
+        // In-memory database only keeps the contents while the connection is open and do not save it for another session
         connection = DriverManager.getConnection("jdbc:h2:mem:", "sa", "");
         cDao = new SQLCategoryDao(connection); 
         Category incomeTest = new Category("Income", true);
@@ -47,7 +47,6 @@ public class SQLCategoryDaoTest {
     
     @After
     public void tearDown() throws SQLException {
-        //connection.close();        
     }
     
     @Test

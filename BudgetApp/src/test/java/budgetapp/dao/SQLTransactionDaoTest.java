@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,7 +17,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * 
+ * JUnit tests for SQLTransactionDao class
  */
 public class SQLTransactionDaoTest {
     
@@ -39,6 +38,8 @@ public class SQLTransactionDaoTest {
     
     @Before
     public void setUp() throws SQLException, Exception {
+        // Tests use H2 in-memory database, not the actual database which the application uses 
+        // In-memory database only keeps the contents while the connection is open and do not save it for another session
         connection = DriverManager.getConnection("jdbc:h2:mem:", "sa", "");
         cDao = new SQLCategoryDao(connection);
         tDao = new SQLTransactionDao(connection, cDao);
@@ -113,15 +114,15 @@ public class SQLTransactionDaoTest {
     @Test
     public void transactionsAreListedCorrectlyByCategory() throws Exception {
         tDao.create(new Transaction(cDao.read(1), "test transaction", 300, LocalDate.of(1900, 12, 31)));
-        List<Transaction> list = tDao.listByCategory(cDao.read(1));
+        List<Transaction> list = tDao.listFromCategory(cDao.read(1));
         assertEquals(2, list.size());
-        assertEquals(1, list.get(0).getId());
+        assertEquals(3, list.get(0).getId());
         assertEquals("Income", list.get(0).getCategory().getName());        
-        assertEquals("setup test transaction 1", list.get(0).getDescription());
-        assertEquals(3, list.get(1).getId());        
+        assertEquals("test transaction", list.get(0).getDescription());
+        assertEquals(1, list.get(1).getId());        
         assertEquals("Income", list.get(1).getCategory().getName());
-        assertEquals("test transaction", list.get(1).getDescription());
-        assertEquals(300, list.get(1).getAmount());
+        assertEquals("setup test transaction 1", list.get(1).getDescription());
+        assertEquals(100, list.get(1).getAmount());
     }
     
 }
