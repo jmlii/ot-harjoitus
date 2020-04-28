@@ -6,6 +6,8 @@ Sovelluksen avulla käyttäjä voi seurata toteutuneita tulojaan ja menojaan tai
 
 ## Dokumentaatio
 
+[Käyttöohje](dokumentaatio/kayttoohje.md)
+
 [Vaatimusmäärittely](dokumentaatio/vaatimusmaarittely.md)
 
 [Arkkitehtuuri](dokumentaatio/arkkitehtuuri.md)
@@ -15,6 +17,8 @@ Sovelluksen avulla käyttäjä voi seurata toteutuneita tulojaan ja menojaan tai
 ## Releaset
 
 [versio 0.1 (pre-release) - viikko 5](https://github.com/jmlii/ot-harjoitus/releases/tag/v0.1)
+
+[versio 0.2 (pre-release) - viikko 6](https://github.com/jmlii/ot-harjoitus/releases/tag/v0.2)
 
 ## Komentorivitoiminnot
 
