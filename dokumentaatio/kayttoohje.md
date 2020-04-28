@@ -22,6 +22,14 @@ java -jar BudgetApp-X.X.jar
 ## Aloitusnäkymä
 Sovellus avautuu näkymään, jossa käyttäjä näkee taloutensa kirjatut tulot, menot ja näiden tasapainon, sekä tapahtumien summat tapahtumakategorioittain. Kategorioiden kohdalta voi siirtyä tarkastelemaan kyseisen kategorian tapahtumia. Sovelluksen ylälaidassa on valikko, josta käyttäjä voi siirtyä kirjaamaan uuden tulon tai menon, tarkastelemaan kaikkia tapahtumia, tai exit-painikkeesta lopettaa ohjelman käytön. 
 
+Sovelluksen aloitusnäkymä ensimmäisellä käynnistyskerralla, tai jos käyttäjä ei ole tallentanut sovellukseen mitään tietoja:
+
+![](kuvat/budgetapp_home.jpg)
+
+Sovelluksen aloitusnäkymä, kun sovellukseen on tallennettu tapahtumia: 
+
+![](kuvat/budgetapp_home_with_transactions.jpg)
+
 ## Tapahtumat kategorioittain
 Aloitusnäkymän oikeassa laidassa on listaus tapahtumakategorioista, ja kategorioittain summa koko kategorian tapahtumien arvosta. View-painikkeesta voi siirtyä tarkastelemaan halutun kategorian tapahtumia.
 
@@ -33,10 +41,22 @@ Käyttäjä voi siirtyä kirjaamaan uuden tulon New income -painikkeesta, tai uu
 
 Tuloille on vain yksi kategoria, jonka ne saavat automaattisesti tapahtuman luomisen yhteydessä. Lomakkeella annetaan lisäksi tapahtumalle kuvaus (description), arvo (amount) kokonaislukuna ja tapahtuman päivämäärä (date). Tiedot tallennetaan Save-painikkeella. Lomakkeelta voi poistua tallentamatta tietoja Cancel-painikkeella.
 
+Tulon lisääminen:
+
+![](kuvat/budgetapp_new_income.jpg)
+
 Menon lisääminen muistuttaa tulon lisäämistä, mutta menolle valitaan lisäksi kulukategoria Category-kohdan pudotusvalikosta. Ohjelmassa on valmiina 13 määriteltyä kulukategoriaa kattamaan tyypillisiä menoja. Menon arvo annetaan positiivisena kokonaislukuna, mutta ohjelma käsittelee sen tapahtumalistauksiinsa negatiiviseksi luvuksi.  
 
+Menon lisääminen:
+
+![](kuvat/budgetapp_new_expense.jpg)
+
 ## Tapahtumalistaus
-Transactions-painikkeesta pääsee tarkastelemaan kaikkia ohjelmaan kirjattuja tulo- ja menotapahtumia. Tapahtumat listautuvat aikajärjestyksessä, uusimmat ylimpänä. Kunkin tapahtuman kohdalta pääsee Edit-painikkeesta siirtymään tapahtuman tietojen muokkaamiseen, ja Delete-painikkeella tapahtuman voi poistaa. Muokkauslomakkeella voi muokata kaikkia muita tietoja, mutta tulokategoriaa ei voi vaihtaa menokategoriaksi, eikä menokategoriaa voi vaihtaa tulokategoriaan.
+Transactions-painikkeesta pääsee tarkastelemaan kaikkia ohjelmaan kirjattuja tulo- ja menotapahtumia. Tapahtumat listautuvat aikajärjestyksessä, uusimmat ylimpänä. Kunkin tapahtuman kohdalta pääsee Edit-painikkeesta siirtymään tapahtuman tietojen muokkaamiseen, ja Delete-painikkeella tapahtuman voi poistaa. Muokkauslomakkeella voi muokata kaikkia muita tietoja, mutta tulokategoriaa ei voi vaihtaa menokategoriaksi, eikä menokategoriaa voi vaihtaa tulokategoriaksi.
+
+Tapahtumalistaus:
+
+![](kuvat/budgetapp_transactions.jpg)
 
 ## Ohjelman sulkeminen
-Ohjelman käytön voi lopettaa sovelluksen ylälaidan valikon exit-painikkeella. Painikkeen painaminen sulkee yhteyden tietokantaan ja ohjelmaan, mutta ei sulje sovellusikkunaa. Ohjelman voi sulkea myös suoraan käyttöjärjestelmän mukaisesta sovellusikkunansulkemispainikkeesta (esim. Linuxissa ja Windowsissa on tyypillisesti rasti sovellusikkunan oikeassa yläkulmassa). Tämä katkaisee yhteyden tietokantaan ja ohjelmaan.
+Ohjelman käytön voi lopettaa sovelluksen ylälaidan valikon Exit-painikkeella. Painikkeen painaminen sulkee yhteyden tietokantaan ja ohjelmaan, mutta ei sulje sovellusikkunaa. Ohjelman voi sulkea myös suoraan käyttöjärjestelmän mukaisesta sovellusikkunansulkemispainikkeesta (esim. Linuxissa ja Windowsissa on tyypillisesti rasti sovellusikkunan oikeassa yläkulmassa). Tämä katkaisee yhteyden tietokantaan ja ohjelmaan.
