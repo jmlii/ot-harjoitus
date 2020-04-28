@@ -435,17 +435,18 @@ public class BudgetGui extends Application {
         situationView.add(expenseSum, 1, 2);
         GridPane.setHalignment(expenseSum, HPos.RIGHT);
         
-        PieChart categoryShareChart = new PieChart(budgetService.listCategoryPieChartData());
-        categoryShareChart.setPrefWidth(100);
-        categoryShareChart.setLabelsVisible(false);
-        categoryShareChart.setLegendVisible(false);
-        categoryShareChart.getData().forEach(data -> {
-            String percentage = String.format("%.2f%%", (data.getPieValue()));
-            String categoryToolTip = data.getName() + " " + percentage;
-            Tooltip toolTip = new Tooltip(categoryToolTip);
-            Tooltip.install(data.getNode(), toolTip);
-        });
-        situationView.add(categoryShareChart, 0, 1, 3, 3);
+//      Toimii vain jos tietokannassa on tapahtumia, vaatii vielä muokkausta  
+//        PieChart categoryShareChart = new PieChart(budgetService.listCategoryPieChartData());
+//        categoryShareChart.setPrefWidth(100);
+//        categoryShareChart.setLabelsVisible(false);
+//        categoryShareChart.setLegendVisible(false);
+//        categoryShareChart.getData().forEach(data -> {
+//            String percentage = String.format("%.2f%%", (data.getPieValue()));
+//            String categoryToolTip = data.getName() + " " + percentage;
+//            Tooltip toolTip = new Tooltip(categoryToolTip);
+//            Tooltip.install(data.getNode(), toolTip);
+//        });
+//        situationView.add(categoryShareChart, 0, 1, 3, 3);
         
         
         updateSituation();
