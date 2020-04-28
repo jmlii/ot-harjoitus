@@ -43,7 +43,7 @@ Pakkauksen budgetapp.dao luokkien [SQLCategoryDao](/BudgetApp/src/main/java/budg
 Rajapintoja hyödynnetään myös sovelluslogiikan testauksessa, sillä sovelluslogiikan testeissä ei käytetä tietokantaan tallentavia luokkia, vaan niistä tehtyjä jäljitelmiä, jotka tallentavat tiedot vain testien ajaksi keskusmuistiin. 
 
 ### Tietokanta
-Sovellus tallentaa kategorioiden ja tilitapahtumien tiedot tietokantaan. Sovellus käyttää H2-tietokantaa, joka on määritelty sovelluksen juureen sijoitetussa konfiguraatiotiedostossa [config.properties](/BudgetApp/config.properties). 
+Sovellus tallentaa kategorioiden ja tilitapahtumien tiedot tietokantaan. Oletuksena sovellus käyttää H2-tietokantaa, joka on määritelty sovelluksen juureen sijoitetussa konfiguraatiotiedostossa [config.properties](/BudgetApp/config.properties). Tietokannan voi vaihtaa antamalla konfiguraatiotiedostossa uudet tiedot.
 
 Sovellus luo tietokannan, jos sitä ei vielä ole olemassa, sekä luo sinne tarvittavat taulut Category ja Transaction. 
 
