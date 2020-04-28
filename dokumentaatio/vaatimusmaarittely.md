@@ -11,29 +11,29 @@ Sovelluksella on vain yksi käyttäjärooli eli normaali käyttäjä. Sovellukse
 ## Suunnitellut toiminnallisuudet
 
 ### Yleisnäkymä
-* Yleisnäkymä avautuu käyttäjän käynnistäessä sovelluksen
-* Käyttäjä näkee, kuinka paljon hänellä on tuloja ja menoja, ja taloutensa tasapainon (tulot - menot).
-* Näkymässä tapahtumien summat kategorioittain.
-* Näkymästä voi siirtyä tarkastelemaan tapahtumia kategorioittain, kaikkia tapahtumia, tai lisäämään tulon tai menon. 
+- [x] Yleisnäkymä avautuu käyttäjän käynnistäessä sovelluksen
+- [x] Käyttäjä näkee, kuinka paljon hänellä on tuloja ja menoja, ja taloutensa tasapainon (tulot - menot).
+- [x] Näkymässä tapahtumien summat kategorioittain.
+- [x] Näkymästä voi siirtyä tarkastelemaan tapahtumia kategorioittain, kaikkia tapahtumia, tai lisäämään tulon tai menon. 
 
 ### Tarkastelunäkymä
-* Tapahtumien rivit tulostuvat näytölle tapahtumajärjestyksessä, uusin ensin. (tehty)
-* Tapahtumat voi listata kategorioittain. (tehty, mutta vain aloitusnäkymästä käsin)
-* Käyttäjä voi siirtyä lisäämään tapahtumiin uuden rivin. (tehty)
-* Käyttäjä voi siirtyä muokkaamaan tapahtumia. (tehty)
-* Käyttäjä voi poistaa tapahtuman. (tehty)
+- [x] Tapahtumien rivit tulostuvat näytölle tapahtumajärjestyksessä, uusin ensin. 
+- [ ] Tapahtumat voi listata kategorioittain. (tämä toteutettu vain aloitusnäkymään)
+- [x] Käyttäjä voi siirtyä lisäämään tapahtumiin uuden rivin.
+- [x] Käyttäjä voi siirtyä muokkaamaan tapahtumaa. 
+- [x] Käyttäjä voi poistaa tapahtuman. 
 
 ### Tapahtuman lisääminen
-* Käyttäjä voi lisätä tapahtumiin tulorivejä ja menorivejä. (tehty)
-* Tulotapahtumille tulee automaattisesti tulokategoria. (tehty)
-* Menotapahtumille käyttäjä valitsee listalta kategorian ja syöttää tarkemman kuvauksen, halutun summan ja päivämäärän. (tehty)
+- [x] Käyttäjä voi lisätä tapahtumiin tulorivejä ja menorivejä. 
+- [x] Tulotapahtumille tulee automaattisesti tulokategoria. 
+- [x] Menotapahtumille käyttäjä valitsee listalta kategorian ja syöttää tarkemman kuvauksen, halutun summan ja päivämäärän.
 
 ### Tapahtuman muokkaaminen ja poistaminen
-* Käyttäjä voi muuttaa mitä tahansa rivin tietoa. (tehty)
-* Käyttäjä voi poistaa minkä tahansa rivin. (tehty)
+- [x] Käyttäjä voi muuttaa mitä tahansa rivin tietoa. 
+- [x] Käyttäjä voi poistaa minkä tahansa rivin. 
 
 ### Tietojen tallennus
-* Tapahtumien tiedot tallennetaan tietokantaan. (tehty)
+- [x] Tapahtumien tiedot tallennetaan tietokantaan. 
 
 ## Jatkokehitysideoita
 Sovellusta voidaan täydentää myöhemmin esimerkiksi seuraavilla ominaisuuksilla ja toiminnallisuuksilla.
