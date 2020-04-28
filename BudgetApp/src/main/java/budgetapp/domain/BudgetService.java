@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.PieChart;
 
 
 /**
@@ -20,33 +23,56 @@ public class BudgetService {
      * Constructor for the application service class also sets up the category list defined in this class and saves categories to the database if they are not there yet.
      * @param categoryDao CategoryDao object defined in the application initialization
      * @param transactionDao TransactionDao object defined in the application initialization
+     * @see CategoryDao
+     * @see TransactionDao
      * @throws Exception On error with Dao-objects
      */
     public BudgetService(CategoryDao categoryDao, TransactionDao transactionDao) throws Exception {
         this.categoryDao = categoryDao;
         this.transactionDao = transactionDao;
         
-        addCategories(categoryDao);   
+        addCategories();   
     }
     
     // this method is currently not in use but is kept here for possible future use
     public List<Transaction> listTransactions() throws Exception {
         return transactionDao.listAll();
     }
-                
+    
+    /**
+     * Creates a list of transactions having the given category
+     * @param category Category selected by the user in the UI
+     * @return ArrayList object including all transactions of the wanted category
+     * @throws Exception On error with SQL query
+     */
     public List<Transaction> listTransactionsFromCategory(Category category) throws Exception {
         return transactionDao.listFromCategory(category);
     }
     
+    /**
+     * Creates a list of transactions in date order
+     * @return ArrayList object including all transactions in date order
+     * @throws Exception On error with SQL query
+     */
     public List<Transaction> listTransactionsInDateOrder() throws Exception {
         return transactionDao.listInDateOrder();
     }
 
+    /**
+     * Creates a list of all categories
+     * @return ArrayList object including all categories
+     * @throws Exception On error with SQL query
+     */
     public List<Category> listAllCategories() throws Exception {
         List<Category> categories = categoryDao.listAll();
         return categories;
     }    
     
+    /**
+     * Creates a list of all expense categories
+     * @return ArrayList object including all expense categories (where Category property "incomeCategory" is false)
+     * @throws Exception On error with SQL query
+     */
     public List<Category> listExpenseCategories() throws Exception {
         List<Category> expenseCategories = new ArrayList<>();
         for (Category category : categoryDao.listAll()) {
@@ -57,11 +83,26 @@ public class BudgetService {
         return expenseCategories;
     }
     
+    /**
+     * Adds a new income transaction to be handled by the private method addTransaction(...)
+     * @param description Description given by the user in the UI
+     * @param amount Amount given by the user in the UI
+     * @param date Date given by the user in the UI
+     * @throws Exception On error with SQL query
+     */
     public void addIncomeTransaction(String description, int amount, LocalDate date) throws Exception {
         Category category = categoryDao.readFromName("Income");
         addTransaction(category, description, amount, date);
     }
     
+    /**
+     * Adds a new expense transaction to be handled by the private method addTransaction(...)
+     * @param category Expense category chosen by the user in the UI
+     * @param description Description given by the user in the UI
+     * @param amount Amount given by the user in the UI
+     * @param date Date given by the user in the UI
+     * @throws Exception On error with SQL query
+     */
     public void addExpenseTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
         int expense = amount * -1;
         if (category == null) {
@@ -70,7 +111,15 @@ public class BudgetService {
         addTransaction(category, description, expense, date);
     }
     
-    public void addTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
+    /**
+     * Gets transaction data from other methods in this class and passes them on to data handling classes
+     * @param category Category passed by another method in this class
+     * @param description Description passed by another method in this class
+     * @param amount Amount passed by another method in this class
+     * @param date Date passed by another method in this class
+     * @throws Exception On error with SQL query
+     */
+    private void addTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
         Transaction transaction = new Transaction(category, description, amount, date);
         transactionDao.create(transaction);
     }
@@ -80,6 +129,14 @@ public class BudgetService {
         return transactionDao.read(key);
     }
     
+    /**
+     * Edits income transaction data
+     * @param key Id of the transaction to be edited
+     * @param description Description given by the user in the UI
+     * @param amount Amount given by the user in the UI
+     * @param date Date given by the user in the UI
+     * @throws Exception On error with SQL query
+     */
     public void editIncomeTransaction(Integer key, String description, int amount, LocalDate date) throws Exception {
         Transaction transaction = transactionDao.read(key);
         transaction.setDescription(description);
@@ -88,6 +145,15 @@ public class BudgetService {
         transactionDao.update(transaction);
     }
     
+    /**
+     * Edits expense transaction data
+     * @param key Id of the transaction to be edited
+     * @param category Category chosen by the user in the UI
+     * @param description Description given by the user in the UI
+     * @param amount Amount given by the user in the UI
+     * @param date Date given by the user in the UI
+     * @throws Exception On error with SQL query
+     */
     public void editExpenseTransaction(Integer key, Category category, String description, int amount, LocalDate date) throws Exception {
         Transaction transaction = transactionDao.read(key);
         if (category == null) {
@@ -100,10 +166,20 @@ public class BudgetService {
         transactionDao.update(transaction);
     }
     
+    /**
+     * Deletes a transaction
+     * @param key Id of the transaction to be deleted
+     * @throws Exception On error with SQL query
+     */
     public void deleteTransaction(Integer key) throws Exception {
         transactionDao.delete(key);
     }
     
+    /**
+     * Total sum of all the incomes
+     * @return Int value of all the incomes
+     * @throws Exception On error with SQL query
+     */
     public int getIncomeSum() throws Exception {
         Category income = categoryDao.readFromName("Income");
         List<Transaction> incomeTransactions = transactionDao.listFromCategory(income);
@@ -114,6 +190,11 @@ public class BudgetService {
         return incomeSum;
     }
     
+    /**
+     * Total sum of all the expenses
+     * @return Int value of all the expenses
+     * @throws Exception On error with SQL query
+     */
     public int getExpensesSum() throws Exception {
         int expensesSum = 0; 
         for (Transaction t : transactionDao.listAll()) {
@@ -124,6 +205,11 @@ public class BudgetService {
         return expensesSum;
     }
     
+    /**
+     * Balance of all the incomes and expenses
+     * @return Int value of incomes minus expenses
+     * @throws Exception 
+     */
     public int getBalance() throws Exception {
         int balance = 0;
         for (Transaction t : transactionDao.listAll()) {
@@ -132,6 +218,12 @@ public class BudgetService {
         return balance;
     }
     
+    /**
+     * Sum of all the transactions in the given category
+     * @param category Category chosen by the user in the UI
+     * @return int value of the sum
+     * @throws Exception On error with SQL query
+     */
     public int getCategorySum(Category category) throws Exception {
         int sum = 0;
         for (Transaction t : transactionDao.listAll()) {
@@ -142,7 +234,27 @@ public class BudgetService {
         return sum;
     }
     
-    private void addCategories(CategoryDao categoryDao) throws Exception {
+    public ObservableList<PieChart.Data> listCategoryPieChartData() throws Exception {
+        ObservableList<PieChart.Data> categoryPieChartData = FXCollections.observableArrayList();
+        Double expensesSum = Double.valueOf(getExpensesSum()) * -1;
+        if (expensesSum == 0) {
+            return null;
+        } else {
+            for (Category category : listExpenseCategories()) {
+                String categoryName = category.getName();
+                Double categorySum = Double.valueOf(getCategorySum(category)) * -1;
+                double categoryShare = 0;
+                if (categorySum != 0) {
+                    categoryShare = categorySum * 100 / expensesSum;
+                    categoryPieChartData.add(new PieChart.Data(categoryName, categoryShare));
+                }
+            }
+            return categoryPieChartData; 
+        }
+        
+    }
+    
+    private void addCategories() throws Exception {
         List<Category> categories = createCategoryList();
         for (Category category : categories) {
             categoryDao.create(category);

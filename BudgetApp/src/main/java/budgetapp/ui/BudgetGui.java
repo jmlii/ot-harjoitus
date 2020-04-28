@@ -22,12 +22,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -355,7 +357,6 @@ public class BudgetGui extends Application {
         
         // App basic layout     
         layout = new BorderPane();
-        layout.setPrefSize(660, 400);
         
         
         // Top menu
@@ -434,6 +435,19 @@ public class BudgetGui extends Application {
         situationView.add(expenseSum, 1, 2);
         GridPane.setHalignment(expenseSum, HPos.RIGHT);
         
+        PieChart categoryShareChart = new PieChart(budgetService.listCategoryPieChartData());
+        categoryShareChart.setPrefWidth(100);
+        categoryShareChart.setLabelsVisible(false);
+        categoryShareChart.setLegendVisible(false);
+        categoryShareChart.getData().forEach(data -> {
+            String percentage = String.format("%.2f%%", (data.getPieValue()));
+            String categoryToolTip = data.getName() + " " + percentage;
+            Tooltip toolTip = new Tooltip(categoryToolTip);
+            Tooltip.install(data.getNode(), toolTip);
+        });
+        situationView.add(categoryShareChart, 0, 1, 3, 3);
+        
+        
         updateSituation();
         
         categoryNodes = new VBox();
@@ -475,8 +489,7 @@ public class BudgetGui extends Application {
         getTransactionForm(primaryStage, "newIncome", null);
         transactionForm.setAlignment(Pos.TOP_LEFT);
         
-        VBox newIncomeComponents = new VBox();
-        newIncomeComponents.setPrefSize(660, 400);        
+        VBox newIncomeComponents = new VBox();     
         newIncomeComponents.setPadding(new Insets(20, 20, 20, 20)); 
         newIncomeComponents.getChildren().addAll(incomeIntroLabel, transactionForm);
         
@@ -495,7 +508,6 @@ public class BudgetGui extends Application {
         transactionForm.setAlignment(Pos.TOP_LEFT);
 
         VBox newExpenseComponents = new VBox();
-        newExpenseComponents.setPrefSize(660, 400);        
         newExpenseComponents.setPadding(new Insets(20, 20, 20, 20));
         newExpenseComponents.getChildren().addAll(expenseIntroLabel, transactionForm);
         
@@ -513,7 +525,6 @@ public class BudgetGui extends Application {
         transactionForm.setAlignment(Pos.TOP_LEFT);
 
         VBox editTransactionComponents = new VBox();
-        editTransactionComponents.setPrefSize(660, 400);
         editTransactionComponents.setPadding(new Insets(20, 20, 20, 20));
         editTransactionComponents.getChildren().addAll(editTransactionIntroLabel, transactionForm);
         
@@ -527,7 +538,6 @@ public class BudgetGui extends Application {
         Label exitLabel = new Label("The connection to the app has been closed successfully. You can now close the window.");
 
         VBox exitComponents = new VBox();
-        exitComponents.setPrefSize(660, 400);
         exitComponents.getChildren().add(exitLabel);
         exitScene = new Scene(exitComponents);
         
@@ -537,8 +547,11 @@ public class BudgetGui extends Application {
         // setup primary scene 
         
         primaryStage.setTitle("BudgetApp");
+        primaryStage.setWidth(660);
+        primaryStage.setHeight(460);
         primaryStage.setScene(primaryScene); 
         primaryStage.show();
+        
     }
 
 
