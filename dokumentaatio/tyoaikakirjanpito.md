@@ -33,4 +33,8 @@
 | 19.4. | 5    | Graafinen käyttöliittymä: mm. summat aloitusnäyttöön + niiden päivitys muutoksissa
 | 20.4. | 5    | Graafisen käyttöliittymän muutokset
 | 21.4. | 4    | Koodin siistiminen, dokumentaatio (muutokset vaatimusmäärittelyyn, sekvenssikaaviot, luokkakaavion päivitys, muutokset arkkitehtuurikuvaukseen)
-| yht.  | 89   |
+| 25.4. | 7    | Koodin siistimistä, Javadoc, dokumentaatio
+| 26.4. | 8    | Dokumentaatio (mm. arkkitehtuurikuvaus), Javadoc, koodin siistimistä 
+| 27.4. | 1    | Dokumentaatio (mm. arkkitehtuurikuvaus, kaavioiden piirtämistä)
+| 28.4. | 5    | Dokumentaatio (mm. käyttöohje, vaatimusmäärittelyjen päivitys), Javadoc, piirakkakaavion aloitus
+| yht.  | 110   |
