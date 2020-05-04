@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 
+ * Fake TransactionDao class for JUnit testing purposes
  */
 public class FakeTransactionDao implements TransactionDao {
     
@@ -59,13 +59,14 @@ public class FakeTransactionDao implements TransactionDao {
     }
 
     @Override
-    public List<Transaction> listFromCategory(Category category) throws Exception {
+    public List<Transaction> listFromCategoryInDateOrder(Category category) throws Exception {
         List<Transaction> fromCategory = new ArrayList<>();
         for (Transaction t : transactions) {
             if (t.getCategory().equals(category)) {
                 fromCategory.add(t);
             }
         }
+        Collections.sort(fromCategory);
         return fromCategory;
     }
 
@@ -74,6 +75,5 @@ public class FakeTransactionDao implements TransactionDao {
         Collections.sort(transactions);
         return transactions;
     }
-       
-    
+           
 }

@@ -77,6 +77,23 @@
             <property name='allowEmptyConstructors' value='true' />
             <property name='allowEmptyMethods' value='true' />
         </module>
+        
+        <!-- Javadoc -->
+         
+        <module name="JavadocMethod">
+            <property name="scope" value="public"/>
+            <property name="allowMissingParamTags" value="false"/>
+            <property name="allowMissingPropertyJavadoc" value="true"/>
+            <property name="allowMissingThrowsTags" value="false"/>
+            <property name="allowMissingReturnTag" value="false"/>
+            <property name="allowThrowsTagsForSubclasses" value="true"/>
+        </module>
+
+        <module name="JavadocStyle">
+            <property name="scope" value="public"/>
+            <property name="checkEmptyJavadoc" value="true"/>
+        </module> 
+        
     </module>
 
     <!-- File Length -->
@@ -85,7 +102,7 @@
         <property name='max' value='500' />
     </module>
 
-    <!-- käyttöliittymäluokat jätetään pois Checkstylesta, kirjattu tiedostoon skipped_files.xml -->
+    <!-- UI classes left outside of Checkstyle, documented in file skipped_files.xml -->
     <module name="SuppressionFilter">
         <property name="file" value="skipped_files.xml" />
     </module>

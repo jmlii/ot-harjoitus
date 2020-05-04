@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO pattern concrete class to handle methods for saving transaction data to the database and for retrieving it
+ * DAO pattern concrete class to handle methods for saving transaction data to the database and for retrieving it.
  */
 public class SQLTransactionDao implements TransactionDao {
     
@@ -19,7 +19,7 @@ public class SQLTransactionDao implements TransactionDao {
     private CategoryDao categoryDao;
     
     /**
-     * Constructor sets the database connection to the class and creates table Transaction to the database if the table does not yet exist
+     * Constructor sets the database connection to the class and creates table Transaction to the database if the table does not yet exist.
      * @param connection Database connection defined in the application configuration properties
      * @param categoryDao CategoryDao object defined in the application initialization
      * @throws SQLException On error with SQL query
@@ -41,7 +41,7 @@ public class SQLTransactionDao implements TransactionDao {
     }
     
     /**
-     * Creates a new transaction to the database
+     * Creates a new transaction to the database.
      * @param transaction Transaction set in the application service class
      * @throws Exception On error with SQL query
      */
@@ -56,7 +56,7 @@ public class SQLTransactionDao implements TransactionDao {
     }
     
     /**
-     * Reads a transaction item from the database using the ID number to identify the wanted transaction
+     * Reads a transaction item from the database using the ID number to identify the wanted transaction.
      * @param key ID number given as a key in the application service class
      * @return Transaction retrieved from the database with the given key as id number
      * @throws Exception On error with SQL query
@@ -76,7 +76,7 @@ public class SQLTransactionDao implements TransactionDao {
     }
        
     /**
-     * Updates the data of a given transaction in the database
+     * Updates the data of a given transaction in the database.
      * @param transaction Transaction set in the application service class
      * @return Updated transaction set in the application service class
      * @throws Exception On error with SQL query
@@ -94,7 +94,7 @@ public class SQLTransactionDao implements TransactionDao {
     }
     
     /**
-     * Deletes a transaction item from the database using the ID number to identify the wanted transaction
+     * Deletes a transaction item from the database using the ID number to identify the wanted transaction.
      * @param key ID number given as a key in the application service class
      * @throws Exception On error with SQL query
      */
@@ -108,7 +108,7 @@ public class SQLTransactionDao implements TransactionDao {
     }
     
     /**
-     * Creates a list of all transactions in the database
+     * Creates a list of all transactions in the database.
      * @return ArrayList object including all transactions in the database
      * @throws Exception On error with SQL query
      */
@@ -123,14 +123,14 @@ public class SQLTransactionDao implements TransactionDao {
     }
     
     /**
-     * Creates a list of transactions from the database, having the stated category 
+     * Creates a list of transactions from the database, having the stated category, listed in descending date order (latest transaction first).
      * @param category Category set in the application service class
      * @see Category
      * @return ArrayList object including all transactions of the wanted category
      * @throws Exception On error with SQL query
      */
     @Override
-    public List<Transaction> listFromCategory(Category category) throws Exception {
+    public List<Transaction> listFromCategoryInDateOrder(Category category) throws Exception {
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Transaction"
                 + " WHERE category_id = ? ORDER BY date DESC");
         stmt.setInt(1, category.getId());
@@ -142,7 +142,7 @@ public class SQLTransactionDao implements TransactionDao {
     }
     
     /**
-     * Creates a list of all transactions in the database, sorted in descending date order (latest transaction first)
+     * Creates a list of all transactions in the database, sorted in descending date order (latest transaction first).
      * @return ArrayList object including all transactions in the database, sorted in descending date order
      * @throws Exception On error with SQL query
      */
@@ -158,7 +158,7 @@ public class SQLTransactionDao implements TransactionDao {
     }
     
     /**
-     * Sets values to a transaction to be transmitted to the database
+     * Sets values to a transaction to be transmitted to the database.
      * @param stmt PreparedStatement defined in the method using this method
      * @param transaction Transaction set in the method using this method
      * @throws SQLException On error with SQL query
@@ -171,7 +171,7 @@ public class SQLTransactionDao implements TransactionDao {
     }
     
     /**
-     * Creates a transaction object from the given Resultset
+     * Creates a transaction object from the given ResultSet.
      * @param rs ResultSet returned by the query stated in the method that uses this method
      * @return Transaction created from the ResultSet
      * @throws Exception On error with SQL query
@@ -186,7 +186,7 @@ public class SQLTransactionDao implements TransactionDao {
     }
     
     /**
-     * Creates a list of transactions from the given ResultSet
+     * Creates a list of transactions from the given ResultSet.
      * @param rs ResultSet returned by the query stated in the method that uses this method
      * @return ArrayList object including transactions from the ResultSet
      * @throws Exception On error with SQL query

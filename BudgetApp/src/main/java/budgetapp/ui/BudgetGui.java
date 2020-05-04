@@ -30,15 +30,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * Graphical user interface
+ * Graphical user interface.
  */
 
 public class BudgetGui extends Application {
@@ -62,7 +66,11 @@ public class BudgetGui extends Application {
     private Label balanceSum;
     private Label incomeSum;
     private Label expenseSum;
-
+    private PieChart categoryPieChart;
+    
+    private String previousView;
+    private Image signMinus;
+    private Image signPlus;
     
     @Override
     public void init() throws Exception {
@@ -78,8 +86,7 @@ public class BudgetGui extends Application {
         SQLCategoryDao categoryDao = new SQLCategoryDao(connection);
         SQLTransactionDao transactionDao = new SQLTransactionDao(connection, categoryDao);
         
-        budgetService = new BudgetService(categoryDao, transactionDao);
-        
+        budgetService = new BudgetService(categoryDao, transactionDao);   
     }
     
     
@@ -91,7 +98,7 @@ public class BudgetGui extends Application {
         Button viewButton = new Button("View");
         
         categoryLabel.setPrefWidth(180);
-        sumLabel.setPrefWidth(70);
+        sumLabel.setPrefWidth(90);
         sumLabel.setAlignment(Pos.BASELINE_RIGHT);
         
         cRow.getChildren().addAll(categoryLabel, sumLabel, viewButton);
@@ -132,9 +139,9 @@ public class BudgetGui extends Application {
         tRow.getChildren().addAll(categoryLabel, descriptionLabel, amountLabel, dateLabel, editButton, deleteButton);
         
         tRow.setSpacing(10);
-        categoryLabel.setPrefWidth(120);
-        descriptionLabel.setPrefWidth(150);
-        amountLabel.setPrefWidth(70);
+        categoryLabel.setPrefWidth(180);
+        descriptionLabel.setPrefWidth(180);
+        amountLabel.setPrefWidth(80);
         amountLabel.setAlignment(Pos.BASELINE_RIGHT);
         dateLabel.setPrefWidth(90);
         dateLabel.setAlignment(Pos.BASELINE_RIGHT);
@@ -144,9 +151,13 @@ public class BudgetGui extends Application {
         deleteButton.setOnAction((event) -> {
             try { 
                 budgetService.deleteTransaction(transaction.getId());
-                listTransactions(primaryStage);
                 listCategories(primaryStage);
                 updateSituation();
+                if (previousView.equals("listTransactionsFromCategory")) {
+                    listTransactionsFromCategory(transaction.getCategory(), primaryStage);
+                } else {
+                    listTransactions(primaryStage);
+                }
             } catch (Exception ex) {
                 Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -155,7 +166,6 @@ public class BudgetGui extends Application {
         editButton.setOnAction((event) -> {
             try {
                 getTransactionForm(primaryStage, "editTransaction", transaction);
-                transactionForm.setAlignment(Pos.TOP_LEFT);
             } catch (Exception ex) {
                 Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -169,9 +179,10 @@ public class BudgetGui extends Application {
     // Compilation and updating of transaction list rows:
     public void listTransactions(Stage primaryStage) throws Exception {
         transactionNodes.getChildren().clear();
-        for (Transaction t : budgetService.listTransactionsInDateOrder()) {
+        for (Transaction t : budgetService.listTransactions()) {
             transactionNodes.getChildren().add(transactionNode(t, primaryStage));
         }
+        previousView = "listTransactions";
     }
     
     
@@ -181,6 +192,7 @@ public class BudgetGui extends Application {
         for (Transaction t : budgetService.listTransactionsFromCategory(category)) {
             transactionNodes.getChildren().add(transactionNode(t, primaryStage));
         }
+        previousView = "listTransactionsFromCategory";
     }
     
     
@@ -197,7 +209,7 @@ public class BudgetGui extends Application {
         ComboBox categoryComboBox = new ComboBox(categoryList);
         Text categoryErrorMessage = new Text();
         Label descriptionLabel = new Label("Description");
-        TextField descriptionField = new TextField("");
+        TextField descriptionField = new TextField();
         Text descriptionFieldErrorMessage = new Text();
         Label amountLabel = new Label("Amount");
         TextField amountField = new TextField();
@@ -207,31 +219,29 @@ public class BudgetGui extends Application {
         Text datePickerErrorMessage = new Text();
         Button saveButton = new Button("Save");
         saveButton.setDefaultButton(true);
+        saveButton.setPrefWidth(70);
         Button cancelButton = new Button("Cancel");
         cancelButton.setCancelButton(true);
-        
+        cancelButton.setPrefWidth(70);
+                
         if (transaction != null) {
-            
             descriptionField.setText(transaction.getDescription());
-            datePicker.setValue(transaction.getDate());
             if (!transaction.getCategory().isIncomeCategory()) {
                 categoryComboBox.setValue(transaction.getCategory());
                 amountField.setText(String.valueOf(-1 * transaction.getAmount()));
             } else  {
                 amountField.setText(String.valueOf(transaction.getAmount()));
-            }    
+            }
+            datePicker.setValue(transaction.getDate());            
         }
-        
+        transactionForm.add(categoryLabel, 0, 0);
         if (form.equals("newExpense") || (form.equals("editTransaction") && transaction != null && !transaction.getCategory().isIncomeCategory())) {
-            transactionForm.add(categoryLabel, 0, 0);
             transactionForm.add(categoryComboBox, 1, 0);
             transactionForm.add(categoryErrorMessage, 2, 0);
         }
         if (form.equals("newIncome") || form.equals("editTransaction") && transaction != null && transaction.getCategory().isIncomeCategory()) {
-            transactionForm.add(categoryLabel, 0, 0);
             transactionForm.add(categoryIncome, 1, 0);
         }
-        
         transactionForm.add(descriptionLabel, 0, 1);
         transactionForm.add(descriptionField, 1, 1);
         transactionForm.add(descriptionFieldErrorMessage, 2, 1);
@@ -262,6 +272,12 @@ public class BudgetGui extends Application {
                     category = (Category) categoryComboBox.getValue();
                     categoryErrorMessage.setText("");
                 }
+            } else if (form.equals("newIncome") || (form.equals("editTransaction") && transaction != null && transaction.getCategory().isIncomeCategory())) {
+                try {
+                    category = budgetService.getIncomeCategory();
+                } catch (Exception ex) {
+                    Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             if (descriptionField.getText().length() > 64 || descriptionField.getText().length() < 1) {
                 descriptionFieldErrorMessage.setText("Please insert 1-64 characters.");
@@ -271,12 +287,12 @@ public class BudgetGui extends Application {
                 descriptionFieldErrorMessage.setText("");
             }
             try {
-                amount = Integer.valueOf(amountField.getText());  
+                amount = Integer.parseUnsignedInt(amountField.getText()); 
                 amountFieldErrorMessage.setText("");
             } catch (NumberFormatException nfException) {
-                amountFieldErrorMessage.setText("Please insert a whole number.");
+                amountFieldErrorMessage.setText("Please insert a positive whole number.");
                 errorsOnForm = true;
-            }                
+            } 
             if (datePicker.getValue() == null) {
                 datePickerErrorMessage.setText("Please pick a date.");
                 errorsOnForm = true;
@@ -320,9 +336,13 @@ public class BudgetGui extends Application {
                 amountField.clear();
                 datePicker.setValue(null);
                 try {
-                    listTransactions(primaryStage);
                     listCategories(primaryStage);
                     updateSituation();
+                    if (previousView.equals("listTransactionsFromCategory")) {
+                        listTransactionsFromCategory(category, primaryStage);
+                    } else {
+                        listTransactions(primaryStage);
+                    }
                 } catch (Exception ex) {
                     Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -344,11 +364,36 @@ public class BudgetGui extends Application {
     }
  
     
-    // Updating of the amounts in the situation view
+    // Updating of the amounts and pie chart in the situation view
     public void updateSituation() throws Exception {
         balanceSum.setText("" + budgetService.getBalance());
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(20);
+        imageView.setFitWidth(20);
+        balanceSum.setGraphic(imageView);
+        if (budgetService.getBalance() < 0) {
+            balanceSum.setTextFill(Color.RED); 
+            imageView.setImage(signMinus);
+        } else if (budgetService.getBalance() > 0) {
+            balanceSum.setTextFill(Color.LIMEGREEN);
+            imageView.setImage(signPlus);
+        } else {
+            balanceSum.setTextFill(incomeSum.getTextFill()); 
+            balanceSum.setGraphic(null);
+        }
         incomeSum.setText("" + budgetService.getIncomeSum());                   
         expenseSum.setText("" + budgetService.getExpensesSum());
+        
+        categoryPieChart.setData(budgetService.listCategoryPieChartData());
+        categoryPieChart.getData().forEach(data -> {
+            String percentage = String.format("%.2f%%", (data.getPieValue()));
+            String categoryToolTip = data.getName() + " " + percentage;
+            Tooltip toolTip = new Tooltip(categoryToolTip);
+            Tooltip.install(data.getNode(), toolTip);
+        });
+        if (categoryPieChart.getData().get(0).getName().equals("Nothing")) {
+            categoryPieChart.getData().get(0).getNode().setStyle("-fx-pie-color: GREY;");
+        }
     }
     
     
@@ -358,7 +403,6 @@ public class BudgetGui extends Application {
         // App basic layout     
         layout = new BorderPane();
         
-        
         // Top menu
         
         HBox topMenu = new HBox();
@@ -366,10 +410,18 @@ public class BudgetGui extends Application {
         topMenu.setSpacing(10);
         topMenu.setStyle("-fx-background-color: DARKKHAKI");
         Button homeButton = new Button("Home");
+        homeButton.setPrefWidth(110);
         Button newIncomeButton = new Button("New income");
+        newIncomeButton.setPrefWidth(110);
         Button newExpenseButton = new Button("New expense");
+        newExpenseButton.setPrefWidth(110);
         Button transactionsButton = new Button("Transactions");
+        transactionsButton.setPrefWidth(110);
+        
+        HBox exitBox = new HBox();
+        exitBox.setAlignment(Pos.CENTER_RIGHT);
         Button exitButton = new Button("Exit");
+        exitBox.getChildren().add(exitButton);
         
         homeButton.setOnAction((event) -> {
             try {
@@ -391,7 +443,6 @@ public class BudgetGui extends Application {
             } catch (Exception ex) {
                 Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
             layout.setCenter(transactionListComponents);
         });
         
@@ -403,8 +454,9 @@ public class BudgetGui extends Application {
                 Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        topMenu.getChildren().addAll(homeButton, newIncomeButton, newExpenseButton, transactionsButton, exitButton);
         
+        topMenu.getChildren().addAll(homeButton, newIncomeButton, newExpenseButton, transactionsButton, exitBox);
+        HBox.setHgrow(exitBox, Priority.ALWAYS);
         layout.setTop(topMenu);
         
         // End of top menu
@@ -422,6 +474,10 @@ public class BudgetGui extends Application {
         Label balanceLabel = new Label("Balance:");
         situationView.add(balanceLabel, 0, 0);
         balanceSum = new Label();
+        FileInputStream inputPlus = new FileInputStream("src/main/resources/images/plus.png");
+        signPlus = new Image(inputPlus);       
+        FileInputStream inputMinus = new FileInputStream("src/main/resources/images/minus.png");
+        signMinus = new Image(inputMinus);
         situationView.add(balanceSum, 1, 0);
         GridPane.setHalignment(balanceSum, HPos.RIGHT);
         Label incomeLabel = new Label("Income:");
@@ -434,20 +490,18 @@ public class BudgetGui extends Application {
         expenseSum = new Label();
         situationView.add(expenseSum, 1, 2);
         GridPane.setHalignment(expenseSum, HPos.RIGHT);
+        Label categoryPieChartLabel = new Label("My money is spent on...");
+        categoryPieChartLabel.setStyle("-fx-font-style: italic;");
+        situationView.add(categoryPieChartLabel, 0, 4, 2, 1); 
+                
+        categoryPieChart = new PieChart();
+        categoryPieChart.setStartAngle(90);
+        categoryPieChart.setLabelsVisible(false);
+        categoryPieChart.setLegendVisible(false);
+        categoryPieChart.setPrefWidth(200);
+        categoryPieChart.setPrefHeight(200);      
         
-//      Toimii vain jos tietokannassa on tapahtumia, vaatii vielä muokkausta  
-//        PieChart categoryShareChart = new PieChart(budgetService.listCategoryPieChartData());
-//        categoryShareChart.setPrefWidth(100);
-//        categoryShareChart.setLabelsVisible(false);
-//        categoryShareChart.setLegendVisible(false);
-//        categoryShareChart.getData().forEach(data -> {
-//            String percentage = String.format("%.2f%%", (data.getPieValue()));
-//            String categoryToolTip = data.getName() + " " + percentage;
-//            Tooltip toolTip = new Tooltip(categoryToolTip);
-//            Tooltip.install(data.getNode(), toolTip);
-//        });
-//        situationView.add(categoryShareChart, 0, 1, 3, 3);
-        
+        situationView.add(categoryPieChart, 0, 5, 2, 1);
         
         updateSituation();
         
@@ -463,32 +517,30 @@ public class BudgetGui extends Application {
         // End of home page
         
         
-        // All transactions list 
+        // Transactions list (all transactions and transactions from a single category)
         
         Label transactionListHeading = new Label("Transactions");
+        transactionListHeading.setStyle("-fx-font-weight: bold;");
         transactionListHeading.setPadding(new Insets(15, 10, 15, 10));
-        
-        transactionListComponents = new VBox();
-        
+
         ScrollPane transactionPane = new ScrollPane();
         transactionPane.setPadding(new Insets(15, 10, 15, 10));
         transactionNodes = new VBox();
-        listTransactions(primaryStage);
         transactionPane.setContent(transactionNodes);
-        
+
+        transactionListComponents = new VBox();
         transactionListComponents.getChildren().addAll(transactionListHeading, transactionPane);
-         
+        previousView = "";
         // End of all transactions list
         
         
-        // New income form
+        // New income form (scene)
         
         Label incomeIntroLabel = new Label("Add a new income");
         incomeIntroLabel.setPadding(new Insets(15, 0, 20, 0));
         
         transactionForm = new GridPane();
         getTransactionForm(primaryStage, "newIncome", null);
-        transactionForm.setAlignment(Pos.TOP_LEFT);
         
         VBox newIncomeComponents = new VBox();     
         newIncomeComponents.setPadding(new Insets(20, 20, 20, 20)); 
@@ -499,14 +551,13 @@ public class BudgetGui extends Application {
         // End of new income form
         
         
-        // New expense form
+        // New expense form (scene)
         
         Label expenseIntroLabel = new Label("Add a new expense");
         expenseIntroLabel.setPadding(new Insets(15, 0, 20, 0));
             
         transactionForm = new GridPane();
         getTransactionForm(primaryStage, "newExpense", null);
-        transactionForm.setAlignment(Pos.TOP_LEFT);
 
         VBox newExpenseComponents = new VBox();
         newExpenseComponents.setPadding(new Insets(20, 20, 20, 20));
@@ -517,13 +568,12 @@ public class BudgetGui extends Application {
         // End of new expense form
        
         
-        // Edit transaction form;
+        // Edit transaction form (scene)
                 
         Label editTransactionIntroLabel = new Label("Edit transaction");
         editTransactionIntroLabel.setPadding(new Insets(15, 0, 20, 0));
             
         transactionForm = new GridPane();
-        transactionForm.setAlignment(Pos.TOP_LEFT);
 
         VBox editTransactionComponents = new VBox();
         editTransactionComponents.setPadding(new Insets(20, 20, 20, 20));
@@ -548,7 +598,7 @@ public class BudgetGui extends Application {
         // setup primary scene 
         
         primaryStage.setTitle("BudgetApp");
-        primaryStage.setWidth(660);
+        primaryStage.setWidth(760);
         primaryStage.setHeight(460);
         primaryStage.setScene(primaryScene); 
         primaryStage.show();

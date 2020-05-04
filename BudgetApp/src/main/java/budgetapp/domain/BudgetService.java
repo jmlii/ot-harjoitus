@@ -12,7 +12,7 @@ import javafx.scene.chart.PieChart;
 
 
 /**
- * Class for application logic
+ * Class for application logic.
  */
 public class BudgetService {
         
@@ -34,32 +34,27 @@ public class BudgetService {
         addCategories();   
     }
     
-    // this method is currently not in use but is kept here for possible future use
-    public List<Transaction> listTransactions() throws Exception {
-        return transactionDao.listAll();
-    }
-    
     /**
-     * Creates a list of transactions having the given category
+     * Creates a list of transactions having the given category.
      * @param category Category selected by the user in the UI
      * @return ArrayList object including all transactions of the wanted category
      * @throws Exception On error with SQL query
      */
     public List<Transaction> listTransactionsFromCategory(Category category) throws Exception {
-        return transactionDao.listFromCategory(category);
+        return transactionDao.listFromCategoryInDateOrder(category);
     }
     
     /**
-     * Creates a list of transactions in date order
+     * Creates a list of all transactions in date order.
      * @return ArrayList object including all transactions in date order
      * @throws Exception On error with SQL query
      */
-    public List<Transaction> listTransactionsInDateOrder() throws Exception {
+    public List<Transaction> listTransactions() throws Exception {
         return transactionDao.listInDateOrder();
     }
 
     /**
-     * Creates a list of all categories
+     * Creates a list of all categories.
      * @return ArrayList object including all categories
      * @throws Exception On error with SQL query
      */
@@ -69,7 +64,7 @@ public class BudgetService {
     }    
     
     /**
-     * Creates a list of all expense categories
+     * Creates a list of all expense categories.
      * @return ArrayList object including all expense categories (where Category property "incomeCategory" is false)
      * @throws Exception On error with SQL query
      */
@@ -84,7 +79,16 @@ public class BudgetService {
     }
     
     /**
-     * Adds a new income transaction to be handled by the private method addTransaction(...)
+     * Returns income category.
+     * @return Category "Income"
+     * @throws Exception On error with SQL query
+     */
+    public Category getIncomeCategory() throws Exception {
+        return categoryDao.readFromName("Income");
+    }
+    
+    /**
+     * Adds a new income transaction to be handled by the private method addTransaction(...).
      * @param description Description given by the user in the UI
      * @param amount Amount given by the user in the UI
      * @param date Date given by the user in the UI
@@ -96,7 +100,7 @@ public class BudgetService {
     }
     
     /**
-     * Adds a new expense transaction to be handled by the private method addTransaction(...)
+     * Adds a new expense transaction to be handled by the private method addTransaction(...).
      * @param category Expense category chosen by the user in the UI
      * @param description Description given by the user in the UI
      * @param amount Amount given by the user in the UI
@@ -106,13 +110,13 @@ public class BudgetService {
     public void addExpenseTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
         int expense = amount * -1;
         if (category == null) {
-            category = categoryDao.readFromName("Unknown");
+            category = categoryDao.readFromName("Other");
         } 
         addTransaction(category, description, expense, date);
     }
     
     /**
-     * Gets transaction data from other methods in this class and passes them on to data handling classes
+     * Gets transaction data from other methods in this class and passes them on to data handling classes.
      * @param category Category passed by another method in this class
      * @param description Description passed by another method in this class
      * @param amount Amount passed by another method in this class
@@ -124,13 +128,8 @@ public class BudgetService {
         transactionDao.create(transaction);
     }
 
-    // this method is currently not in use but is kept here for possible future use
-    public Transaction getTransaction(Integer key) throws Exception {
-        return transactionDao.read(key);
-    }
-    
     /**
-     * Edits income transaction data
+     * Edits income transaction data.
      * @param key Id of the transaction to be edited
      * @param description Description given by the user in the UI
      * @param amount Amount given by the user in the UI
@@ -146,7 +145,7 @@ public class BudgetService {
     }
     
     /**
-     * Edits expense transaction data
+     * Edits expense transaction data.
      * @param key Id of the transaction to be edited
      * @param category Category chosen by the user in the UI
      * @param description Description given by the user in the UI
@@ -157,7 +156,7 @@ public class BudgetService {
     public void editExpenseTransaction(Integer key, Category category, String description, int amount, LocalDate date) throws Exception {
         Transaction transaction = transactionDao.read(key);
         if (category == null) {
-            category = categoryDao.readFromName("Unknown");
+            category = categoryDao.readFromName("Other");
         } 
         transaction.setCategory(category);
         transaction.setDescription(description);
@@ -167,7 +166,7 @@ public class BudgetService {
     }
     
     /**
-     * Deletes a transaction
+     * Deletes a transaction.
      * @param key Id of the transaction to be deleted
      * @throws Exception On error with SQL query
      */
@@ -176,13 +175,13 @@ public class BudgetService {
     }
     
     /**
-     * Total sum of all the incomes
+     * Total sum of all the incomes.
      * @return Int value of all the incomes
      * @throws Exception On error with SQL query
      */
     public int getIncomeSum() throws Exception {
         Category income = categoryDao.readFromName("Income");
-        List<Transaction> incomeTransactions = transactionDao.listFromCategory(income);
+        List<Transaction> incomeTransactions = transactionDao.listFromCategoryInDateOrder(income);
         int incomeSum = 0;
         for (Transaction t : incomeTransactions) {
             incomeSum += t.getAmount();
@@ -191,7 +190,7 @@ public class BudgetService {
     }
     
     /**
-     * Total sum of all the expenses
+     * Total sum of all the expenses.
      * @return Int value of all the expenses
      * @throws Exception On error with SQL query
      */
@@ -206,9 +205,9 @@ public class BudgetService {
     }
     
     /**
-     * Balance of all the incomes and expenses
+     * Balance of all the incomes and expenses.
      * @return Int value of incomes minus expenses
-     * @throws Exception 
+     * @throws Exception On error with SQL query
      */
     public int getBalance() throws Exception {
         int balance = 0;
@@ -219,7 +218,7 @@ public class BudgetService {
     }
     
     /**
-     * Sum of all the transactions in the given category
+     * Sum of all the transactions in the given category.
      * @param category Category chosen by the user in the UI
      * @return int value of the sum
      * @throws Exception On error with SQL query
@@ -234,24 +233,25 @@ public class BudgetService {
         return sum;
     }
     
+    /**
+     * Creates a list of expense categories and their share of total expenses in PieChart.Data format.
+     * @return ObservableList object containing pie chart data of expense categories, or a data node named Nothing if there are no expenses.
+     * @throws Exception On error with SQL query
+     */
     public ObservableList<PieChart.Data> listCategoryPieChartData() throws Exception {
         ObservableList<PieChart.Data> categoryPieChartData = FXCollections.observableArrayList();
         Double expensesSum = Double.valueOf(getExpensesSum()) * -1;
         if (expensesSum == 0) {
-            return null;
+            categoryPieChartData.add(new PieChart.Data("Nothing", 100.00));
         } else {
             for (Category category : listExpenseCategories()) {
                 String categoryName = category.getName();
                 Double categorySum = Double.valueOf(getCategorySum(category)) * -1;
-                double categoryShare = 0;
-                if (categorySum != 0) {
-                    categoryShare = categorySum * 100 / expensesSum;
-                    categoryPieChartData.add(new PieChart.Data(categoryName, categoryShare));
-                }
+                double categoryShare = categorySum * 100 / expensesSum;
+                categoryPieChartData.add(new PieChart.Data(categoryName, categoryShare));
             }
-            return categoryPieChartData; 
         }
-        
+        return categoryPieChartData;
     }
     
     private void addCategories() throws Exception {
@@ -263,7 +263,7 @@ public class BudgetService {
     
     private List<Category> createCategoryList() {
         ArrayList<Category> categories = new ArrayList<>();
-        categories.add(new Category("Housing", false));
+        categories.add(new Category("Housing"));
         categories.add(new Category("Groceries"));
         categories.add(new Category("Transportation"));
         categories.add(new Category("Holiday"));
@@ -275,9 +275,8 @@ public class BudgetService {
         categories.add(new Category("Shopping"));
         categories.add(new Category("Savings and investments"));
         Collections.sort(categories);
+        categories.add(new Category("Other"));        
         categories.add(0, new Category("Income", true));
-        categories.add(new Category("Other"));
-        categories.add(new Category("Unknown"));
         return categories;
     }
      

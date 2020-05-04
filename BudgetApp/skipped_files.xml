@@ -5,7 +5,6 @@
     "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <suppressions>
-    <!-- Käyttöliittymän tiedostot jätetään pois Checkstylesta -->
- 
-    <suppress files="budgetapp.ui.BudgetUi.java" checks="[a-zA-Z0-9]*"/> 
+    <!-- UI class left outside of Checkstyle -->
+    <suppress files="budgetapp.ui.BudgetGui.java" checks="[a-zA-Z0-9]*"/> 
 </suppressions>

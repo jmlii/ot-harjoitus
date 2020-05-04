@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO pattern concrete class to handle methods for saving category data to the database and for retrieving it
+ * DAO pattern concrete class to handle methods for saving category data to the database and for retrieving it.
  */
 public class SQLCategoryDao implements CategoryDao {
     
     private Connection connection;
     
     /**
-     * Constructor sets the database connection to the class and creates table Category to the database if the table does not yet exist
+     * Constructor sets the database connection to the class and creates table Category to the database if the table does not yet exist.
      * @param connection Database connection defined in the application configuration properties
      * @throws SQLException On error with SQL query
      */
@@ -34,7 +34,7 @@ public class SQLCategoryDao implements CategoryDao {
     }
     
     /**
-     * Creates a new category to the database
+     * Creates a new category to the database.
      * @param category Category set in the application service class
      * @throws Exception On error with SQL query
      */
@@ -52,7 +52,7 @@ public class SQLCategoryDao implements CategoryDao {
     }
     
     /**
-     * Reads a category item from the database using the ID number to identify the wanted category
+     * Reads a category item from the database using the ID number to identify the wanted category.
      * @param key ID number given as a key in the application service class
      * @return Category retrieved from the database with the given key as id number 
      * @throws Exception On error with SQL query
@@ -72,7 +72,7 @@ public class SQLCategoryDao implements CategoryDao {
     }
     
     /**
-     * Reads a category item from the database using the category name to identify the wanted category
+     * Reads a category item from the database using the category name to identify the wanted category.
      * @param name Category name given in the application service class
      * @return Category retrieved from the database with the given name
      * @throws Exception On error with SQL query
@@ -92,7 +92,7 @@ public class SQLCategoryDao implements CategoryDao {
     }
     
     /**
-     * Updates the data of a given category in the database
+     * Updates the data of a given category in the database.
      * @param category Category set in the application service class
      * @return Updated category set in the application service class
      * @throws Exception On error with SQL query
@@ -111,7 +111,7 @@ public class SQLCategoryDao implements CategoryDao {
     }
     
     /**
-     * Deletes a category item from the database using the ID number to identify the wanted category
+     * Deletes a category item from the database using the ID number to identify the wanted category.
      * @param key ID number given as a key in the application service class
      * @throws Exception On error with SQL query
      */
@@ -125,7 +125,7 @@ public class SQLCategoryDao implements CategoryDao {
     }
     
     /**
-     * Creates a list of all categories included in the database
+     * Creates a list of all categories included in the database.
      * @return ArrayList object including all categories in the database
      * @throws Exception On error with SQL query
      */
@@ -144,7 +144,7 @@ public class SQLCategoryDao implements CategoryDao {
     }
     
     /**
-     * Creates a category object from the given ResultSet
+     * Creates a category object from the given ResultSet.
      * @param rs ResultSet returned by the query stated in the method that uses this method
      * @return Category created from the ResultSet
      * @throws Exception On error with ResultSet returned by the SQL query

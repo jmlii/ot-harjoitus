@@ -7,15 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * JUnit tests for SQLCategoryDao class
+ * JUnit tests for class SQLCategoryDao
  */
 public class SQLCategoryDaoTest {
     
@@ -23,14 +20,6 @@ public class SQLCategoryDaoTest {
     CategoryDao cDao;
     
     public SQLCategoryDaoTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
     }
     
     @Before
@@ -43,10 +32,6 @@ public class SQLCategoryDaoTest {
         Category expenseTest = new Category("Expense");
         cDao.create(incomeTest); 
         cDao.create(expenseTest);
-    }
-    
-    @After
-    public void tearDown() throws SQLException {
     }
     
     @Test
@@ -93,12 +78,12 @@ public class SQLCategoryDaoTest {
     public void updateGetsCorrectCategoryAndUpdates() throws Exception {
         cDao.create(new Category("testCategory"));
         Category c = cDao.read(3);
-        boolean isIncomeBeforeUpdate = c.isIncomeCategory();
+//        boolean isIncomeBeforeUpdate = c.isIncomeCategory();
         c.setName("UpdatedTestCategory");
-        c.setIncomeCategoryTrue();
+//        c.setIncomeCategoryTrue();
         cDao.update(c);
         assertEquals("UpdatedTestCategory", cDao.read(3).getName());
-        assertFalse(isIncomeBeforeUpdate == cDao.read(3).isIncomeCategory());
+//        assertFalse(isIncomeBeforeUpdate == cDao.read(3).isIncomeCategory());
     }
     
     @Test 

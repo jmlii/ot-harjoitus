@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
         <action>
-            <actionName>CUSTOM-testikattavuus</actionName>
-            <displayName>testikattavuus</displayName>
-            <goals>
-                <goal>jacoco:report</goal>
-            </goals>
-        </action>
-        <action>
             <actionName>CUSTOM-checkstyle</actionName>
             <displayName>checkstyle</displayName>
             <goals>
                 <goal>jxr:jxr</goal>
                 <goal>checkstyle:checkstyle</goal>
-                
             </goals>
         </action>
         <action>
@@ -24,9 +16,10 @@
             <goals>
                 <goal>process-classes</goal>
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
+                
             </goals>
             <properties>
-                <exec.args>-classpath %classpath budgetapp.ui.Main</exec.args>
+                <exec.args>-classpath %classpath budgetapp.Main</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
@@ -40,7 +33,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath budgetapp.ui.Main</exec.args>
+                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath budgetapp.Main</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
             </properties>
@@ -55,8 +48,17 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath budgetapp.ui.Main</exec.args>
+                <exec.args>-classpath %classpath budgetapp.Main</exec.args>
                 <exec.executable>java</exec.executable>
+                
             </properties>
         </action>
+        <action>
+            <actionName>CUSTOM-jacoco testikattavuus</actionName>
+            <displayName>jacoco testikattavuus</displayName>
+            <goals>
+                <goal>jacoco:report</goal>
+            </goals>
+        </action>
+        
     </actions>

@@ -9,15 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * JUnit tests for SQLTransactionDao class
+ * JUnit tests for class SQLTransactionDao
  */
 public class SQLTransactionDaoTest {
     
@@ -27,15 +24,7 @@ public class SQLTransactionDaoTest {
     
     public SQLTransactionDaoTest() {
     }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
+        
     @Before
     public void setUp() throws SQLException, Exception {
         // Tests use H2 in-memory database, not the actual database which the application uses 
@@ -47,10 +36,6 @@ public class SQLTransactionDaoTest {
         cDao.create(new Category("Expense"));
         tDao.create(new Transaction(cDao.read(1), "setup test transaction 1", 100, LocalDate.of(1900, 01, 01)));
         tDao.create(new Transaction(cDao.read(2), "setup test transaction 2", 200, LocalDate.of(1900, 01, 31)));
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     @Test
@@ -114,7 +99,7 @@ public class SQLTransactionDaoTest {
     @Test
     public void transactionsAreListedCorrectlyByCategory() throws Exception {
         tDao.create(new Transaction(cDao.read(1), "test transaction", 300, LocalDate.of(1900, 12, 31)));
-        List<Transaction> list = tDao.listFromCategory(cDao.read(1));
+        List<Transaction> list = tDao.listFromCategoryInDateOrder(cDao.read(1));
         assertEquals(2, list.size());
         assertEquals(3, list.get(0).getId());
         assertEquals("Income", list.get(0).getCategory().getName());        
@@ -123,6 +108,24 @@ public class SQLTransactionDaoTest {
         assertEquals("Income", list.get(1).getCategory().getName());
         assertEquals("setup test transaction 1", list.get(1).getDescription());
         assertEquals(100, list.get(1).getAmount());
+    }
+    
+    @Test
+    public void listInDateOrderReturnsListInCorrectOrder() throws Exception {
+        tDao.create(new Transaction(cDao.read(1), "test transaction", 300, LocalDate.of(1900, 12, 31)));
+        List<Transaction> list = tDao.listInDateOrder();
+        assertEquals(3, list.size());
+        assertEquals(3, list.get(0).getId());
+        assertEquals("Income", list.get(0).getCategory().getName());        
+        assertEquals("test transaction", list.get(0).getDescription());
+        assertEquals(2, list.get(1).getId());
+        assertEquals("Expense", list.get(1).getCategory().getName());
+        assertEquals("setup test transaction 2", list.get(1).getDescription());
+        assertEquals(200, list.get(1).getAmount());
+        assertEquals(1, list.get(2).getId());        
+        assertEquals("Income", list.get(2).getCategory().getName());
+        assertEquals("setup test transaction 1", list.get(2).getDescription());
+        assertEquals(100, list.get(2).getAmount());
     }
     
 }

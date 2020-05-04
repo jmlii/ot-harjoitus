@@ -1,9 +1,6 @@
 package budgetapp.domain;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.time.LocalDate;
@@ -11,9 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Budjetin riviä kuvaavan luokan testit
+ * JUnit tests for class Transaction
  */
-
 public class TransactionTest {
     
     Transaction transaction;
@@ -45,12 +41,7 @@ public class TransactionTest {
     public void ConstructorSetsCorrectDate() {
         assertEquals("2020-03-02", transaction.getDate().toString());
     }  
-    
-    @Test
-    public void ToStringReturnsCorrectFormat() {
-        assertEquals("0, Income, salary, 3000, 2020-03-02", transaction.toString());
-    }
-    
+        
     @Test
     public void transactionsAreSortedInDateOrderNewestFirst() {
         ArrayList<Transaction> transactions = new ArrayList<>();

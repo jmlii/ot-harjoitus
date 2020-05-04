@@ -1,13 +1,17 @@
 package budgetapp.domain;
 
 /**
- * Class for category
+ * Class for category.
  */
 public class Category implements Comparable<Category> {
     private int id;
     private String name;
     private boolean incomeCategory;
 
+    /**
+     * Constructor for Category with only Category name given sets Boolean incomeCategory false by default.
+     * @param name Name to be given to the Category
+     */
     public Category(String name) {
         this.name = name;
         this.incomeCategory = false;
@@ -48,21 +52,17 @@ public class Category implements Comparable<Category> {
         this.incomeCategory = incomeCategory;
     }
     
-    public void setIncomeCategoryTrue() {
-        incomeCategory = true;
-    }
-    
-    public void setIncomeCategoryFalse() {
-        incomeCategory = false;
-    }
-    
+    /**
+     * Used for returning the category in String format.
+     * @return Category name
+     */
     @Override
     public String toString() {
-        return name;
+        return this.name;
     }
     
     /**
-     * Compares the category with a given category by their names, can be used for setting categories in alphabetical order
+     * Compares the category with a given category by their names, can be used for setting categories in alphabetical order.
      * @param otherCategory the category to be compared with
      * @return value 0 if category names are equal, value less than 0 if the name of this category is before the name of the otherCategory in alphabetical order,  and value greater than 0 if the name of this category is later than the name of the otherCategory in alphabetical order
      */
@@ -72,7 +72,7 @@ public class Category implements Comparable<Category> {
     }
     
     /**
-     * Checks whether two categories have the same properties and are thus equal
+     * Checks whether two categories have the same properties and are thus equal.
      * @param o the object to be compared with
      * @return true if o is an instance of Category class and has the same id and same name as this category and either both are incomeCategories or neither is, otherwise false
      */

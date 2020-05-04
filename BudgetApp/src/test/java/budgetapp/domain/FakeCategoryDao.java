@@ -4,9 +4,8 @@ import budgetapp.dao.CategoryDao;
 import java.util.ArrayList;
 import java.util.List; 
 
-
 /**
- * 
+ * Fake CategoryDao class for JUnit testing purposes
  */
 public class FakeCategoryDao implements CategoryDao {
     

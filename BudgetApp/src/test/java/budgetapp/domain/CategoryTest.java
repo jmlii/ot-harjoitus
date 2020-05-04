@@ -1,18 +1,14 @@
 package budgetapp.domain;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Budjetin kategoriaa kuvaavan luokan testit
+ * JUnit tests for class Category
  */
-
 public class CategoryTest {
     
     Category category1, category2, category3;
@@ -20,23 +16,11 @@ public class CategoryTest {
     public CategoryTest() {
     }
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
     @Before
     public void setUp() {
         category1 = new Category(1, "test", true);
         category2 = new Category(2, "anotherTest", false);
         category3 = new Category("yetAnother");
-    }
-    
-    @After
-    public void tearDown() {
     }
     
     @Test
@@ -49,19 +33,7 @@ public class CategoryTest {
         category2.setIncomeCategory(true);
         assertTrue(category2.isIncomeCategory());
     }
-    
-    @Test
-    public void setIncomeCategoryTrueSetsCorrectBooleanValue() {
-        category2.setIncomeCategoryTrue();
-        assertTrue(category2.isIncomeCategory());
-    }
-    
-    @Test
-    public void setIncomeCategoryFalseSetsCorrectBooleanValue() {
-        category1.setIncomeCategoryFalse();
-        assertFalse(category1.isIncomeCategory());
-    }
-    
+        
     @Test
     public void categoriesAreSortedInRightAlphabeticalOrder() {
         ArrayList<Category> categories = new ArrayList<>();
