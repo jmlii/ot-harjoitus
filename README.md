@@ -25,7 +25,7 @@ Sovelluksen avulla käyttäjä voi seurata toteutuneita tulojaan ja menojaan tai
 ### Projektin koodin suorittaminen
 Projektin koodin voi suorittaa komentorivillä komennolla
 ```
-mvn compile exec:java -Dexec.mainClass=budgetapp.ui.Main
+mvn compile exec:java -Dexec.mainClass=budgetapp.Main
 ```
 Projektin koodin voi suorittaa myös esim. NetBeansissa.
 
