@@ -13,12 +13,20 @@ Sovelluksella on vain yksi käyttäjärooli eli normaali käyttäjä. Sovellukse
 ### Yleisnäkymä
 - [x] Yleisnäkymä avautuu käyttäjän käynnistäessä sovelluksen
 - [x] Käyttäjä näkee, kuinka paljon hänellä on tuloja ja menoja, ja taloutensa tasapainon (tulot - menot).
-- [x] Näkymässä tapahtumien summat kategorioittain.
-- [x] Näkymästä voi siirtyä tarkastelemaan tapahtumia kategorioittain, kaikkia tapahtumia, tai lisäämään tulon tai menon. 
+- [x] Talouden tasapaino -mittari näyttää tasapainon punaisella, jos se on miinuksella, ja vihreällä, jos se on plussalla.
+- [x] Näkymässä on tapahtumien summat kategorioittain.
+- [x] Näkymässä on piiraskaavio, joka näyttää menojen jakautumisen eri kategorioihin prosentuaalisina osuuksina.
+- [x] Näkymästä voi siirtyä tarkastelemaan tapahtumia kategorioittain, kaikkia tapahtumia, tai lisäämään tulon tai menon.
 
-### Tarkastelunäkymä
+### Tarkastelunäkymä kaikille tapahtumille
 - [x] Tapahtumien rivit tulostuvat näytölle tapahtumajärjestyksessä, uusin ensin. 
-- [ ] Tapahtumat voi listata kategorioittain. (tämä toteutettu vain aloitusnäkymään)
+- [x] Käyttäjä voi siirtyä lisäämään tapahtumiin uuden rivin.
+- [x] Käyttäjä voi siirtyä muokkaamaan tapahtumaa. 
+- [x] Käyttäjä voi poistaa tapahtuman. 
+
+### Tarkastelunäkymä yhden kategorian tapahtumille
+- [x] Näkymä tulostaa näytölle halutun kategorian tapahtumat.
+- [x] Kategorian tapahtumien rivit tulostuvat näytölle tapahtumajärjestyksessä, uusin ensin. 
 - [x] Käyttäjä voi siirtyä lisäämään tapahtumiin uuden rivin.
 - [x] Käyttäjä voi siirtyä muokkaamaan tapahtumaa. 
 - [x] Käyttäjä voi poistaa tapahtuman. 
@@ -27,10 +35,15 @@ Sovelluksella on vain yksi käyttäjärooli eli normaali käyttäjä. Sovellukse
 - [x] Käyttäjä voi lisätä tapahtumiin tulorivejä ja menorivejä. 
 - [x] Tulotapahtumille tulee automaattisesti tulokategoria. 
 - [x] Menotapahtumille käyttäjä valitsee listalta kategorian ja syöttää tarkemman kuvauksen, halutun summan ja päivämäärän.
+- [x] Tapahtuman lisäämisen voi perua ilman että mitään tallennetaan.
+- [x] Lisäyslomakkeen kentät tyhjenevät, kun lomakkeelta poistutaan.
 
 ### Tapahtuman muokkaaminen ja poistaminen
 - [x] Käyttäjä voi muuttaa mitä tahansa rivin tietoa. 
 - [x] Käyttäjä voi poistaa minkä tahansa rivin. 
+- [x] Tapahtuman muokkaamisen jälkeen ohjelma palaa tapahtumalistaan, josta hän siirtyi muokkauslomakkeelle.
+- [x] Jos tapahtuman muokkaamiseen siirryttiin kategorian tapahtumalistauksesta, niin ohjelma palaa kyseisen tapahtuman kategorian mukaiseen listaukseen; jos kategoria on vaihdettu, niin ohjelma palaa uuden kategorian listaukseen.
+- [x] Tapahtuman muokkaamisen voi perua ilman että mitään muutoksia tallennetaan.
 
 ### Tietojen tallennus
 - [x] Tapahtumien tiedot tallennetaan tietokantaan. 
