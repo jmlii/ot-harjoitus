@@ -37,4 +37,11 @@
 | 26.4. | 8    | Dokumentaatio (mm. arkkitehtuurikuvaus), Javadoc, koodin siistimistä 
 | 27.4. | 1    | Dokumentaatio (mm. arkkitehtuurikuvaus, kaavioiden piirtämistä)
 | 28.4. | 5    | Dokumentaatio (mm. käyttöohje, vaatimusmäärittelyjen päivitys), Javadoc, piirakkakaavion aloitus
-| yht.  | 110   |
+| 29.4. | 2    | Piiraskaavio toimivaksi
+| 2.5.  | 6    | Kokeiluja käyttöliittymälle
+| 3.5.  | 5    | Käyttöliittymäkokeiluja, sovelluksen viimeistelyä
+| 4.5.  | 10   | Käyttöliittymäkokeiluja, Javadocin täydennys, koodin siistimistä ja luokkien ja testien korjaaminen vastaavasti, vaatimusmäärittelyn päivitys
+| 5.5.  | 2    | Koodin parantelua
+| 6.5.  | 4    | Arkkitehtuurikuvaus, koodin parantelua ja testien muokkaaminen vastaavasti
+| 7.5.  | 6    | Käyttöliittymän viimeistely, dokumentaation viimeistely
+| yht.  | 145  | 
