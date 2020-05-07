@@ -24,9 +24,9 @@ public class SQLCategoryDaoTest {
     
     @Before
     public void setUp() throws SQLException, Exception {
-        // Tests use H2 in-memory database, not the actual database which the application uses 
-        // In-memory database only keeps the contents while the connection is open and do not save it for another session
-        connection = DriverManager.getConnection("jdbc:h2:mem:", "sa", "");
+        // Tests use H2 in-memory database, not the actual database which the application uses. 
+        // In-memory database only keeps the contents while the connection is open and do not save it for another session.
+        connection = DriverManager.getConnection("jdbc:h2:mem:", "sa", "");    
         cDao = new SQLCategoryDao(connection); 
         Category incomeTest = new Category("Income", true);
         Category expenseTest = new Category("Expense");

@@ -27,8 +27,8 @@ public class SQLTransactionDaoTest {
         
     @Before
     public void setUp() throws SQLException, Exception {
-        // Tests use H2 in-memory database, not the actual database which the application uses 
-        // In-memory database only keeps the contents while the connection is open and do not save it for another session
+        // Tests use H2 in-memory database, not the actual database which the application uses. 
+        // In-memory database only keeps the contents while the connection is open and do not save it for another session.
         connection = DriverManager.getConnection("jdbc:h2:mem:", "sa", "");
         cDao = new SQLCategoryDao(connection);
         tDao = new SQLTransactionDao(connection, cDao);

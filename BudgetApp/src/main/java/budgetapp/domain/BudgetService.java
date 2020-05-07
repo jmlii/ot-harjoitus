@@ -37,6 +37,7 @@ public class BudgetService {
     /**
      * Creates a list of transactions having the given category.
      * @param category Category selected by the user in the UI
+     * @see budgetapp.dao.TransactionDao#listFromCategoryInDateOrder(budgetapp.domain.Category) 
      * @return ArrayList object including all transactions of the wanted category
      * @throws Exception On error with SQL query
      */
@@ -46,6 +47,7 @@ public class BudgetService {
     
     /**
      * Creates a list of all transactions in date order.
+     * @see budgetapp.dao.TransactionDao#listInDateOrder()      
      * @return ArrayList object including all transactions in date order
      * @throws Exception On error with SQL query
      */
@@ -55,6 +57,7 @@ public class BudgetService {
 
     /**
      * Creates a list of all categories.
+     * @see budgetapp.dao.CategoryDao#listAll()      
      * @return ArrayList object including all categories
      * @throws Exception On error with SQL query
      */
@@ -65,6 +68,8 @@ public class BudgetService {
     
     /**
      * Creates a list of all expense categories.
+     * @see budgetapp.dao.CategoryDao#listAll()
+     * @see budgetapp.domain.Category#isIncomeCategory()      
      * @return ArrayList object including all expense categories (where Category property "incomeCategory" is false)
      * @throws Exception On error with SQL query
      */
@@ -80,6 +85,7 @@ public class BudgetService {
     
     /**
      * Returns income category.
+     * @see budgetapp.dao.CategoryDao#readFromName(java.lang.String)      
      * @return Category "Income"
      * @throws Exception On error with SQL query
      */
@@ -92,6 +98,8 @@ public class BudgetService {
      * @param description Description given by the user in the UI
      * @param amount Amount given by the user in the UI
      * @param date Date given by the user in the UI
+     * @see budgetapp.dao.CategoryDao#readFromName(java.lang.String) 
+     * @see budgetapp.domain.BudgetService#addTransaction(budgetapp.domain.Category, java.lang.String, int, java.time.LocalDate) 
      * @throws Exception On error with SQL query
      */
     public void addIncomeTransaction(String description, int amount, LocalDate date) throws Exception {
@@ -105,6 +113,8 @@ public class BudgetService {
      * @param description Description given by the user in the UI
      * @param amount Amount given by the user in the UI
      * @param date Date given by the user in the UI
+     * @see budgetapp.dao.CategoryDao#readFromName(java.lang.String) 
+     * @see budgetapp.domain.BudgetService#addTransaction(budgetapp.domain.Category, java.lang.String, int, java.time.LocalDate) 
      * @throws Exception On error with SQL query
      */
     public void addExpenseTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
@@ -121,6 +131,7 @@ public class BudgetService {
      * @param description Description passed by another method in this class
      * @param amount Amount passed by another method in this class
      * @param date Date passed by another method in this class
+     * @see budgetapp.dao.TransactionDao#create(budgetapp.domain.Transaction) 
      * @throws Exception On error with SQL query
      */
     private void addTransaction(Category category, String description, int amount, LocalDate date) throws Exception {
@@ -130,14 +141,15 @@ public class BudgetService {
 
     /**
      * Edits income transaction data.
-     * @param key Id of the transaction to be edited
+     * @param transaction Transaction chosen in the UI to be edited
      * @param description Description given by the user in the UI
      * @param amount Amount given by the user in the UI
      * @param date Date given by the user in the UI
+     * @see budgetapp.dao.TransactionDao#update(budgetapp.domain.Transaction) 
+     * @see budgetapp.domain.Transaction
      * @throws Exception On error with SQL query
      */
-    public void editIncomeTransaction(Integer key, String description, int amount, LocalDate date) throws Exception {
-        Transaction transaction = transactionDao.read(key);
+    public void editIncomeTransaction(Transaction transaction, String description, int amount, LocalDate date) throws Exception {
         transaction.setDescription(description);
         transaction.setAmount(amount);
         transaction.setDate(date);
@@ -146,16 +158,16 @@ public class BudgetService {
     
     /**
      * Edits expense transaction data.
-     * @param key Id of the transaction to be edited
+     * @param transaction Transaction chosen in the UI to be edited
      * @param category Category chosen by the user in the UI
      * @param description Description given by the user in the UI
      * @param amount Amount given by the user in the UI
      * @param date Date given by the user in the UI
+     * @see budgetapp.dao.TransactionDao#update(budgetapp.domain.Transaction) 
      * @throws Exception On error with SQL query
      */
-    public void editExpenseTransaction(Integer key, Category category, String description, int amount, LocalDate date) throws Exception {
-        Transaction transaction = transactionDao.read(key);
-        if (category == null) {
+    public void editExpenseTransaction(Transaction transaction, Category category, String description, int amount, LocalDate date) throws Exception {
+       if (category == null) {
             category = categoryDao.readFromName("Other");
         } 
         transaction.setCategory(category);
@@ -166,8 +178,9 @@ public class BudgetService {
     }
     
     /**
-     * Deletes a transaction.
+     * Deletes a transaction. 
      * @param key Id of the transaction to be deleted
+     * @see budgetapp.dao.TransactionDao#delete(java.lang.Integer)     
      * @throws Exception On error with SQL query
      */
     public void deleteTransaction(Integer key) throws Exception {
@@ -176,6 +189,8 @@ public class BudgetService {
     
     /**
      * Total sum of all the incomes.
+     * @see budgetapp.dao.CategoryDao#readFromName(java.lang.String) 
+     * @see budgetapp.dao.TransactionDao#listFromCategoryInDateOrder(budgetapp.domain.Category) 
      * @return Int value of all the incomes
      * @throws Exception On error with SQL query
      */
@@ -191,6 +206,7 @@ public class BudgetService {
     
     /**
      * Total sum of all the expenses.
+     * @see budgetapp.dao.TransactionDao#listAll() 
      * @return Int value of all the expenses
      * @throws Exception On error with SQL query
      */
@@ -206,6 +222,7 @@ public class BudgetService {
     
     /**
      * Balance of all the incomes and expenses.
+     * @see budgetapp.dao.
      * @return Int value of incomes minus expenses
      * @throws Exception On error with SQL query
      */
@@ -220,6 +237,7 @@ public class BudgetService {
     /**
      * Sum of all the transactions in the given category.
      * @param category Category chosen by the user in the UI
+     * @see budgetapp.dao.TransactionDao#listAll() 
      * @return int value of the sum
      * @throws Exception On error with SQL query
      */
@@ -235,6 +253,7 @@ public class BudgetService {
     
     /**
      * Creates a list of expense categories and their share of total expenses in PieChart.Data format.
+     * @see budgetapp.domain.BudgetService#listExpenseCategories() 
      * @return ObservableList object containing pie chart data of expense categories, or a data node named Nothing if there are no expenses.
      * @throws Exception On error with SQL query
      */

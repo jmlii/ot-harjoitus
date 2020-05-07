@@ -6,6 +6,7 @@ import budgetapp.domain.BudgetService;
 import budgetapp.domain.Category;
 import budgetapp.domain.Transaction;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -30,8 +31,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -44,7 +43,6 @@ import javafx.stage.Stage;
 /**
  * Graphical user interface.
  */
-
 public class BudgetGui extends Application {
     
     private BudgetService budgetService;
@@ -64,13 +62,13 @@ public class BudgetGui extends Application {
     private GridPane transactionForm;
     
     private Label balanceSum;
+    private Label balanceLabel;
     private Label incomeSum;
     private Label expenseSum;
     private PieChart categoryPieChart;
     
     private String previousView;
-    private Image signMinus;
-    private Image signPlus;
+    
     
     @Override
     public void init() throws Exception {
@@ -89,6 +87,210 @@ public class BudgetGui extends Application {
         budgetService = new BudgetService(categoryDao, transactionDao);   
     }
     
+    
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        
+        // Create app basic layout and components for the layout (top menu, home page and transaction lists):
+        layout = new BorderPane();        
+        createTopMenu(primaryStage);
+        createHomePage(primaryStage);        
+        createTransactionsList();        
+        primaryScene = new Scene(layout);
+                
+        // Create individual scenes:
+        createNewIncomeScene(primaryStage);        
+        createNewExpenseScene(primaryStage);         
+        createEditTransactionScene();         
+        createExitScene();
+        
+        // Setup of primary stage and primary scene:
+        primaryStage.setTitle("BudgetApp");
+        primaryStage.setWidth(760);
+        primaryStage.setHeight(460);
+        primaryStage.setScene(primaryScene); 
+        primaryStage.show();
+        
+    }
+
+
+    // Top menu components for home page and transaction lists:
+    public void createTopMenu(Stage primaryStage) {
+        HBox topMenu = new HBox();
+        topMenu.setPadding(new Insets(15, 10, 15, 10));
+        topMenu.setSpacing(10);
+        topMenu.setStyle("-fx-background-color: DARKKHAKI");
+        Button homeButton = new Button("Home");
+        homeButton.setPrefWidth(110);
+        Button newIncomeButton = new Button("New income");
+        newIncomeButton.setPrefWidth(110);
+        Button newExpenseButton = new Button("New expense");
+        newExpenseButton.setPrefWidth(110);
+        Button transactionsButton = new Button("Transactions");
+        transactionsButton.setPrefWidth(110);
+        
+        HBox exitBox = new HBox();
+        exitBox.setAlignment(Pos.CENTER_RIGHT);
+        Button exitButton = new Button("Exit");
+        exitBox.getChildren().add(exitButton);
+        
+        homeButton.setOnAction((event) -> {
+            try {
+                updateSituation();
+            } catch (Exception ex) {
+                Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            layout.setCenter(homePageScrollPane);
+        });
+        newIncomeButton.setOnAction((event) -> {
+            primaryStage.setScene(newIncomeScene);
+        });
+        newExpenseButton.setOnAction((event) -> {
+            primaryStage.setScene(newExpenseScene);
+        });
+        transactionsButton.setOnAction((event) -> {
+            try {
+                listTransactions(primaryStage);
+            } catch (Exception ex) {
+                Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            layout.setCenter(transactionListComponents);
+        });
+        
+        exitButton.setOnAction((event) -> {
+            try {
+                stop();
+                primaryStage.setScene(exitScene);
+            } catch (SQLException ex) {
+                Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        topMenu.getChildren().addAll(homeButton, newIncomeButton, newExpenseButton, transactionsButton, exitBox);
+        HBox.setHgrow(exitBox, Priority.ALWAYS);
+        layout.setTop(topMenu);
+    }
+    
+    // Home page components:
+    public void createHomePage(Stage primaryStage) throws FileNotFoundException, Exception {
+        HBox homePageComponents = new HBox();
+        homePageScrollPane = new ScrollPane();
+        
+        GridPane situationView = new GridPane();
+        situationView.setPadding(new Insets(15, 10, 15, 10));
+        situationView.setHgap(10);
+        situationView.setVgap(10);
+        
+        balanceLabel = new Label("Balance:");
+        balanceLabel.setStyle("-fx-font-weight: bold;");
+        situationView.add(balanceLabel, 0, 0);
+        balanceSum = new Label();
+        balanceSum.setStyle("-fx-font-weight: bold;");        
+        situationView.add(balanceSum, 1, 0);
+        GridPane.setHalignment(balanceSum, HPos.RIGHT);
+        Label incomeLabel = new Label("Income:");
+        situationView.add(incomeLabel, 0, 1);
+        incomeSum = new Label();
+        situationView.add(incomeSum, 1, 1);
+        GridPane.setHalignment(incomeSum, HPos.RIGHT);
+        Label expenseLabel = new Label("Expenses:");
+        situationView.add(expenseLabel, 0, 2);
+        expenseSum = new Label();
+        situationView.add(expenseSum, 1, 2);
+        GridPane.setHalignment(expenseSum, HPos.RIGHT);
+        Label categoryPieChartLabel = new Label("My money is spent on...");
+        categoryPieChartLabel.setStyle("-fx-font-style: italic;");
+        situationView.add(categoryPieChartLabel, 0, 4, 2, 1); 
+                
+        categoryPieChart = new PieChart();
+        categoryPieChart.setStartAngle(90);
+        categoryPieChart.setLabelsVisible(false);
+        categoryPieChart.setLegendVisible(false);
+        categoryPieChart.setPrefWidth(200);
+        categoryPieChart.setPrefHeight(200);      
+        
+        situationView.add(categoryPieChart, 0, 5, 2, 1);
+        
+        updateSituation();
+        
+        categoryNodes = new VBox();
+        categoryNodes.setPadding(new Insets(15, 10, 15, 10));
+        listCategories(primaryStage);
+        
+        homePageComponents.getChildren().addAll(situationView, categoryNodes);        
+        homePageScrollPane.setContent(homePageComponents);
+        layout.setCenter(homePageScrollPane);
+    }
+    
+    // Transactions list components (all transactions and transactions from a single category)
+    public void createTransactionsList() {
+                        
+        Label transactionListHeading = new Label("Transactions");
+        transactionListHeading.setStyle("-fx-font-weight: bold;");
+        transactionListHeading.setPadding(new Insets(15, 10, 15, 10));
+
+        ScrollPane transactionPane = new ScrollPane();
+        transactionPane.setPadding(new Insets(15, 10, 15, 10));
+        transactionNodes = new VBox();
+        transactionPane.setContent(transactionNodes);
+
+        transactionListComponents = new VBox();
+        transactionListComponents.getChildren().addAll(transactionListHeading, transactionPane);
+        previousView = "";
+    }
+    
+    // New income form components (scene)
+    public void createNewIncomeScene(Stage primaryStage) throws Exception {
+        Label incomeIntroLabel = new Label("Add a new income");
+        incomeIntroLabel.setPadding(new Insets(15, 0, 20, 0));
+        
+        transactionForm = new GridPane();
+        getTransactionForm(primaryStage, "newIncome", null);
+        
+        VBox newIncomeComponents = new VBox();     
+        newIncomeComponents.setPadding(new Insets(20, 20, 20, 20)); 
+        newIncomeComponents.getChildren().addAll(incomeIntroLabel, transactionForm);
+        
+        newIncomeScene = new Scene(newIncomeComponents);   
+    }
+    
+    // New expense form components (scene)
+    public void createNewExpenseScene(Stage primaryStage) throws Exception {
+        Label expenseIntroLabel = new Label("Add a new expense");
+        expenseIntroLabel.setPadding(new Insets(15, 0, 20, 0));
+            
+        transactionForm = new GridPane();
+        getTransactionForm(primaryStage, "newExpense", null);
+
+        VBox newExpenseComponents = new VBox();
+        newExpenseComponents.setPadding(new Insets(20, 20, 20, 20));
+        newExpenseComponents.getChildren().addAll(expenseIntroLabel, transactionForm);
+        
+        newExpenseScene = new Scene(newExpenseComponents);
+    }
+    
+    // Edit transaction form components (scene)
+    public void createEditTransactionScene() {
+        Label editTransactionIntroLabel = new Label("Edit transaction");
+        editTransactionIntroLabel.setPadding(new Insets(15, 0, 20, 0));
+            
+        transactionForm = new GridPane();
+
+        VBox editTransactionComponents = new VBox();
+        editTransactionComponents.setPadding(new Insets(20, 20, 20, 20));
+        editTransactionComponents.getChildren().addAll(editTransactionIntroLabel, transactionForm);
+        
+        editTransactionScene = new Scene(editTransactionComponents);
+    }
+    
+    // Exit scene components:
+    public void createExitScene() {
+        Label exitLabel = new Label("The connection to the app data storage has been closed. You can now close the window.");
+        VBox exitComponents = new VBox();
+        exitComponents.getChildren().add(exitLabel);
+        exitScene = new Scene(exitComponents);
+    }
+ 
     
     // Components for category list row:
     public Node categoryNode(Category category, Stage primaryStage, BorderPane layout) throws Exception {
@@ -116,7 +318,6 @@ public class BudgetGui extends Application {
         return cRow;
     }
     
-    
     // Compilation and updating of category list rows
     public void listCategories(Stage primaryStage) throws Exception {
         categoryNodes.getChildren().clear();
@@ -124,7 +325,6 @@ public class BudgetGui extends Application {
             categoryNodes.getChildren().add(categoryNode(c, primaryStage, layout));
         }
     }
-    
     
     // Components for transaction list row: 
     public Node transactionNode(Transaction transaction, Stage primaryStage) {
@@ -175,7 +375,6 @@ public class BudgetGui extends Application {
         return tRow;
     }
     
-    
     // Compilation and updating of transaction list rows:
     public void listTransactions(Stage primaryStage) throws Exception {
         transactionNodes.getChildren().clear();
@@ -185,7 +384,6 @@ public class BudgetGui extends Application {
         previousView = "listTransactions";
     }
     
-    
     // Compilation and updating of transaction list rows for single category:
     public void listTransactionsFromCategory(Category category, Stage primaryStage) throws Exception {
         transactionNodes.getChildren().clear();
@@ -194,7 +392,6 @@ public class BudgetGui extends Application {
         }
         previousView = "listTransactionsFromCategory";
     }
-    
     
     // Components for different transaction forms
     public void getTransactionForm(Stage primaryStage, String form, Transaction transaction) throws Exception {
@@ -304,7 +501,6 @@ public class BudgetGui extends Application {
                 if (form.equals("newIncome")) {
                     try {
                         budgetService.addIncomeTransaction(description, amount, date);
-                        updateSituation();
                     } catch (Exception ex) {
                         Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -312,21 +508,20 @@ public class BudgetGui extends Application {
                 if (form.equals("newExpense")) {
                     try {
                         budgetService.addExpenseTransaction(category, description, amount, date);
-                        updateSituation();
                     } catch (Exception ex) {
                         Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 if (form.equals("editTransaction") && (transaction != null && !transaction.getCategory().isIncomeCategory())) {
                     try {
-                        budgetService.editExpenseTransaction(transaction.getId(), category, description, amount, date);
+                        budgetService.editExpenseTransaction(transaction, category, description, amount, date);
                     } catch (Exception ex) {
                         Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 if (form.equals("editTransaction") && (transaction != null && transaction.getCategory().isIncomeCategory())) {
                     try {
-                        budgetService.editIncomeTransaction(transaction.getId(), description, amount, date);
+                        budgetService.editIncomeTransaction(transaction, description, amount, date);
                     } catch (Exception ex) {
                         Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -363,23 +558,19 @@ public class BudgetGui extends Application {
         });
     }
  
-    
-    // Updating of the amounts and pie chart in the situation view
+    // Updating of the amounts and pie chart in the situation view on home page
     public void updateSituation() throws Exception {
         balanceSum.setText("" + budgetService.getBalance());
-        ImageView imageView = new ImageView();
-        imageView.setFitHeight(20);
-        imageView.setFitWidth(20);
-        balanceSum.setGraphic(imageView);
         if (budgetService.getBalance() < 0) {
+            balanceLabel.setTextFill(Color.RED); 
             balanceSum.setTextFill(Color.RED); 
-            imageView.setImage(signMinus);
         } else if (budgetService.getBalance() > 0) {
+            balanceLabel.setTextFill(Color.LIMEGREEN);
             balanceSum.setTextFill(Color.LIMEGREEN);
-            imageView.setImage(signPlus);
+
         } else {
+            balanceLabel.setTextFill(incomeSum.getTextFill());
             balanceSum.setTextFill(incomeSum.getTextFill()); 
-            balanceSum.setGraphic(null);
         }
         incomeSum.setText("" + budgetService.getIncomeSum());                   
         expenseSum.setText("" + budgetService.getExpensesSum());
@@ -394,215 +585,6 @@ public class BudgetGui extends Application {
         if (categoryPieChart.getData().get(0).getName().equals("Nothing")) {
             categoryPieChart.getData().get(0).getNode().setStyle("-fx-pie-color: GREY;");
         }
-    }
-    
-    
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        
-        // App basic layout     
-        layout = new BorderPane();
-        
-        // Top menu
-        
-        HBox topMenu = new HBox();
-        topMenu.setPadding(new Insets(15, 10, 15, 10));
-        topMenu.setSpacing(10);
-        topMenu.setStyle("-fx-background-color: DARKKHAKI");
-        Button homeButton = new Button("Home");
-        homeButton.setPrefWidth(110);
-        Button newIncomeButton = new Button("New income");
-        newIncomeButton.setPrefWidth(110);
-        Button newExpenseButton = new Button("New expense");
-        newExpenseButton.setPrefWidth(110);
-        Button transactionsButton = new Button("Transactions");
-        transactionsButton.setPrefWidth(110);
-        
-        HBox exitBox = new HBox();
-        exitBox.setAlignment(Pos.CENTER_RIGHT);
-        Button exitButton = new Button("Exit");
-        exitBox.getChildren().add(exitButton);
-        
-        homeButton.setOnAction((event) -> {
-            try {
-                updateSituation();
-            } catch (Exception ex) {
-                Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            layout.setCenter(homePageScrollPane);
-        });
-        newIncomeButton.setOnAction((event) -> {
-            primaryStage.setScene(newIncomeScene);
-        });
-        newExpenseButton.setOnAction((event) -> {
-            primaryStage.setScene(newExpenseScene);
-        });
-        transactionsButton.setOnAction((event) -> {
-            try {
-                listTransactions(primaryStage);
-            } catch (Exception ex) {
-                Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            layout.setCenter(transactionListComponents);
-        });
-        
-        exitButton.setOnAction((event) -> {
-            try {
-                stop();
-                primaryStage.setScene(exitScene);
-            } catch (SQLException ex) {
-                Logger.getLogger(BudgetGui.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-        
-        topMenu.getChildren().addAll(homeButton, newIncomeButton, newExpenseButton, transactionsButton, exitBox);
-        HBox.setHgrow(exitBox, Priority.ALWAYS);
-        layout.setTop(topMenu);
-        
-        // End of top menu
-
-        // Home page components
-        
-        HBox homePageComponents = new HBox();
-        homePageScrollPane = new ScrollPane();
-        
-        GridPane situationView = new GridPane();
-        situationView.setPadding(new Insets(15, 10, 15, 10));
-        situationView.setHgap(10);
-        situationView.setVgap(10);
-        
-        Label balanceLabel = new Label("Balance:");
-        situationView.add(balanceLabel, 0, 0);
-        balanceSum = new Label();
-        FileInputStream inputPlus = new FileInputStream("src/main/resources/images/plus.png");
-        signPlus = new Image(inputPlus);       
-        FileInputStream inputMinus = new FileInputStream("src/main/resources/images/minus.png");
-        signMinus = new Image(inputMinus);
-        situationView.add(balanceSum, 1, 0);
-        GridPane.setHalignment(balanceSum, HPos.RIGHT);
-        Label incomeLabel = new Label("Income:");
-        situationView.add(incomeLabel, 0, 1);
-        incomeSum = new Label();
-        situationView.add(incomeSum, 1, 1);
-        GridPane.setHalignment(incomeSum, HPos.RIGHT);
-        Label expenseLabel = new Label("Expenses:");
-        situationView.add(expenseLabel, 0, 2);
-        expenseSum = new Label();
-        situationView.add(expenseSum, 1, 2);
-        GridPane.setHalignment(expenseSum, HPos.RIGHT);
-        Label categoryPieChartLabel = new Label("My money is spent on...");
-        categoryPieChartLabel.setStyle("-fx-font-style: italic;");
-        situationView.add(categoryPieChartLabel, 0, 4, 2, 1); 
-                
-        categoryPieChart = new PieChart();
-        categoryPieChart.setStartAngle(90);
-        categoryPieChart.setLabelsVisible(false);
-        categoryPieChart.setLegendVisible(false);
-        categoryPieChart.setPrefWidth(200);
-        categoryPieChart.setPrefHeight(200);      
-        
-        situationView.add(categoryPieChart, 0, 5, 2, 1);
-        
-        updateSituation();
-        
-        categoryNodes = new VBox();
-        categoryNodes.setPadding(new Insets(15, 10, 15, 10));
-        listCategories(primaryStage);
-        
-        homePageComponents.getChildren().addAll(situationView, categoryNodes);        
-        homePageScrollPane.setContent(homePageComponents);
-        layout.setCenter(homePageScrollPane);
-        primaryScene = new Scene(layout);
-        
-        // End of home page
-        
-        
-        // Transactions list (all transactions and transactions from a single category)
-        
-        Label transactionListHeading = new Label("Transactions");
-        transactionListHeading.setStyle("-fx-font-weight: bold;");
-        transactionListHeading.setPadding(new Insets(15, 10, 15, 10));
-
-        ScrollPane transactionPane = new ScrollPane();
-        transactionPane.setPadding(new Insets(15, 10, 15, 10));
-        transactionNodes = new VBox();
-        transactionPane.setContent(transactionNodes);
-
-        transactionListComponents = new VBox();
-        transactionListComponents.getChildren().addAll(transactionListHeading, transactionPane);
-        previousView = "";
-        // End of all transactions list
-        
-        
-        // New income form (scene)
-        
-        Label incomeIntroLabel = new Label("Add a new income");
-        incomeIntroLabel.setPadding(new Insets(15, 0, 20, 0));
-        
-        transactionForm = new GridPane();
-        getTransactionForm(primaryStage, "newIncome", null);
-        
-        VBox newIncomeComponents = new VBox();     
-        newIncomeComponents.setPadding(new Insets(20, 20, 20, 20)); 
-        newIncomeComponents.getChildren().addAll(incomeIntroLabel, transactionForm);
-        
-        newIncomeScene = new Scene(newIncomeComponents);    
-        
-        // End of new income form
-        
-        
-        // New expense form (scene)
-        
-        Label expenseIntroLabel = new Label("Add a new expense");
-        expenseIntroLabel.setPadding(new Insets(15, 0, 20, 0));
-            
-        transactionForm = new GridPane();
-        getTransactionForm(primaryStage, "newExpense", null);
-
-        VBox newExpenseComponents = new VBox();
-        newExpenseComponents.setPadding(new Insets(20, 20, 20, 20));
-        newExpenseComponents.getChildren().addAll(expenseIntroLabel, transactionForm);
-        
-        newExpenseScene = new Scene(newExpenseComponents);
-        
-        // End of new expense form
-       
-        
-        // Edit transaction form (scene)
-                
-        Label editTransactionIntroLabel = new Label("Edit transaction");
-        editTransactionIntroLabel.setPadding(new Insets(15, 0, 20, 0));
-            
-        transactionForm = new GridPane();
-
-        VBox editTransactionComponents = new VBox();
-        editTransactionComponents.setPadding(new Insets(20, 20, 20, 20));
-        editTransactionComponents.getChildren().addAll(editTransactionIntroLabel, transactionForm);
-        
-        editTransactionScene = new Scene(editTransactionComponents);
-        
-        // End of edit transaction form
-        
-
-        // Exit scene 
-        
-        Label exitLabel = new Label("The connection to the app has been closed successfully. You can now close the window.");
-
-        VBox exitComponents = new VBox();
-        exitComponents.getChildren().add(exitLabel);
-        exitScene = new Scene(exitComponents);
-        
-        // End of exit scene
-       
-        
-        // setup primary scene 
-        
-        primaryStage.setTitle("BudgetApp");
-        primaryStage.setWidth(760);
-        primaryStage.setHeight(460);
-        primaryStage.setScene(primaryScene); 
-        primaryStage.show();
-        
     }
 
 
