@@ -1,0 +1,4 @@
+Pakkausrakenne- ja luokkakaaviot on piirretty osoitteessa https://www.draw.io/ olevalla työkalulla.
+
+Kaavioiden piirtämisen toteuttava koodi on tallennettu tässä kansiossa olevaan tiedostoon pakkausrakenne_ja_luokkakaaviot.drawio.
+Edellämainitun tiedoston voi avata samassa osoitteessa, jossa kaaviot on piirretty, jolloin ohjelma avaa tiedoston kaaviokuviksi.
