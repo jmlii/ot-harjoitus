@@ -43,5 +43,5 @@
 | 4.5.  | 10   | Käyttöliittymäkokeiluja, Javadocin täydennys, koodin siistimistä ja luokkien ja testien korjaaminen vastaavasti, vaatimusmäärittelyn päivitys
 | 5.5.  | 2    | Koodin parantelua
 | 6.5.  | 4    | Arkkitehtuurikuvaus, koodin parantelua ja testien muokkaaminen vastaavasti
-| 7.5.  | 6    | Käyttöliittymän viimeistely, dokumentaation viimeistely
+| 7.5.  | 8    | Käyttöliittymän viimeistely, dokumentaation viimeistely, release
 | yht.  | 145  | 
