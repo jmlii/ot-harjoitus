@@ -6,7 +6,6 @@ import budgetapp.domain.BudgetService;
 import budgetapp.domain.Category;
 import budgetapp.domain.Transaction;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -172,7 +171,7 @@ public class BudgetGui extends Application {
     }
     
     // Home page components:
-    public void createHomePage(Stage primaryStage) throws FileNotFoundException, Exception {
+    public void createHomePage(Stage primaryStage) throws Exception {
         HBox homePageComponents = new HBox();
         homePageScrollPane = new ScrollPane();
         

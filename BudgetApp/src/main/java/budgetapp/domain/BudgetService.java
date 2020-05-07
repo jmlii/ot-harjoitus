@@ -167,7 +167,7 @@ public class BudgetService {
      * @throws Exception On error with SQL query
      */
     public void editExpenseTransaction(Transaction transaction, Category category, String description, int amount, LocalDate date) throws Exception {
-       if (category == null) {
+        if (category == null) {
             category = categoryDao.readFromName("Other");
         } 
         transaction.setCategory(category);

@@ -45,6 +45,7 @@
                 <configuration>
                     <excludes>
                         <exclude>budgetapp/ui/*</exclude>
+                        <exclude>budgetapp/Main.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

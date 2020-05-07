@@ -19,7 +19,6 @@ public class FakeCategoryDao implements CategoryDao {
     @Override
     public void create(Category category) throws Exception {
         if (readFromName(category.getName()) == null) {
-        //if (!nameExists(category.getName())) {
             category.setId(nextFreeId);
             nextFreeId += 1;
             categories.add(category);

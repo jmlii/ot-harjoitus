@@ -78,12 +78,9 @@ public class SQLCategoryDaoTest {
     public void updateGetsCorrectCategoryAndUpdates() throws Exception {
         cDao.create(new Category("testCategory"));
         Category c = cDao.read(3);
-//        boolean isIncomeBeforeUpdate = c.isIncomeCategory();
         c.setName("UpdatedTestCategory");
-//        c.setIncomeCategoryTrue();
         cDao.update(c);
         assertEquals("UpdatedTestCategory", cDao.read(3).getName());
-//        assertFalse(isIncomeBeforeUpdate == cDao.read(3).isIncomeCategory());
     }
     
     @Test 

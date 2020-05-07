@@ -7,4 +7,5 @@
 <suppressions>
     <!-- UI class left outside of Checkstyle -->
     <suppress files="budgetapp.ui.BudgetGui.java" checks="[a-zA-Z0-9]*"/> 
+    <suppress files="budgetapp.Main.java" checks="[a-zA-Z0-9]*"/> 
 </suppressions>
