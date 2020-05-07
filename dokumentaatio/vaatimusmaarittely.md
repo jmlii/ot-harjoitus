@@ -8,7 +8,7 @@ Tämän sovelluksen avulla käyttäjä voi seurata omia tulojaan ja menojaan. So
 Sovelluksella on vain yksi käyttäjärooli eli normaali käyttäjä. Sovelluksella voi alkuvaiheessa olla myös vain yksi käyttäjä per asennettu sovellus. Sovelluksesta saatetaan myöhemmin tehdä versio, jossa voi olla useita käyttäjiä, ja tällöin voi olla hyödyllistä ottaa käyttöön peruskäyttäjää laajemmilla oikeuksilla varustettuja käyttäjärooleja, joilla on oikeus nähdä tai hallinnoida määriteltyjä muiden käyttäjien tietoja. 
 
 
-## Suunnitellut toiminnallisuudet
+## Toiminnallisuudet
 
 ### Yleisnäkymä
 - [x] Yleisnäkymä avautuu käyttäjän käynnistäessä sovelluksen
@@ -34,7 +34,8 @@ Sovelluksella on vain yksi käyttäjärooli eli normaali käyttäjä. Sovellukse
 ### Tapahtuman lisääminen
 - [x] Käyttäjä voi lisätä tapahtumiin tulorivejä ja menorivejä. 
 - [x] Tulotapahtumille tulee automaattisesti tulokategoria. 
-- [x] Menotapahtumille käyttäjä valitsee listalta kategorian ja syöttää tarkemman kuvauksen, halutun summan ja päivämäärän.
+- [x] Menotapahtumille käyttäjä valitsee listalta kategorian.
+- [x] Kummallekin tyypille käyttäjä syöttää tarkemman kuvauksen, halutun summan ja päivämäärän.
 - [x] Tapahtuman lisäämisen voi perua ilman että mitään tallennetaan.
 - [x] Lisäyslomakkeen kentät tyhjenevät, kun lomakkeelta poistutaan.
 
@@ -42,7 +43,7 @@ Sovelluksella on vain yksi käyttäjärooli eli normaali käyttäjä. Sovellukse
 - [x] Käyttäjä voi muuttaa mitä tahansa rivin tietoa. 
 - [x] Käyttäjä voi poistaa minkä tahansa rivin. 
 - [x] Tapahtuman muokkaamisen jälkeen ohjelma palaa tapahtumalistaan, josta hän siirtyi muokkauslomakkeelle.
-- [x] Jos tapahtuman muokkaamiseen siirryttiin kategorian tapahtumalistauksesta, niin ohjelma palaa kyseisen tapahtuman kategorian mukaiseen listaukseen; jos kategoria on vaihdettu, niin ohjelma palaa uuden kategorian listaukseen.
+- [x] Jos tapahtuman muokkaamiseen siirryttiin kategorian tapahtumalistauksesta, niin ohjelma palaa kyseisen tapahtuman kategorian mukaiseen listaukseen, eli jos kategoria on vaihdettu, niin ohjelma palaa uuden kategorian listaukseen.
 - [x] Tapahtuman muokkaamisen voi perua ilman että mitään muutoksia tallennetaan.
 
 ### Tietojen tallennus
