@@ -1,0 +1,90 @@
+Sekvenssikaaviot on piirretty osoitteessa https://www.websequencediagrams.com/ olevalla työkalulla alla olevia "koodeja" käyttäen.
+
+Sovelluksen käynnistäminen:
+
+main->*BudgetGui: BudgetGui.main(args)
+BudgetGui->BudgetGui: launch
+BudgetGui->BudgetGui: getConnection(database)
+participant budgetService
+participant categoryDao
+participant transactionDao
+BudgetGui->*categoryDao: new CategoryDao(connection)
+BudgetGui->*transactionDao: new TransactionDao(connection, categoryDao)
+BudgetGui->*budgetService: new BudgetService(\n categoryDao, transactionDao)
+budgetService->+budgetService:addCategories()
+budgetService->*income:new Category("Income", true)
+budgetService->categoryDao:create(income)
+categoryDao->categoryDao: proceed if readFromName(\ncategory.getName()) \n returns null
+budgetService->*expense:new Category("Expense")
+budgetService->-categoryDao:create(expense)
+categoryDao->categoryDao: proceed if readFromName(\ncategory.getName()) \n returns null
+BudgetGui->BudgetGui: create scenes
+BudgetGui->BudgetGui:stage.setScene(primaryScene)
+
+
+Uuden menotapahtuman lisääminen:
+
+User->+UI: click new expense
+UI->UI: primaryStage.setScene(newExpenseScene) \n\n getTransactionForm(primaryStage, \n "newExpense", null) \n
+UI->+budgetService: listExpenseCategories()
+budgetService->+categoryDao: listAll()
+categoryDao->*category: new Category(id, name,\n incomeCategory)
+categoryDao-->-budgetService: List<Category>
+budgetService->budgetService: keep if not incomeCategory
+budgetService-->-UI: List<Category>
+UI->UI: sets expense category list \non the form combo box
+UI-->-User:
+User->+UI:click save
+UI->UI: validates form fields
+UI->+budgetService:addExpenseTransaction(category, \ndescription, amount, date)
+budgetService->*transaction:new Transaction(category, description, amount, date)
+budgetService->transactionDao:create(transaction)
+budgetService-->-UI: 
+UI->UI: updates, primaryStage.setScene(primaryScene)
+note left of UI
+updates:
+listCategories(primaryStage) 
+updateSituation()
+listTransactions(primaryStage) / 
+listTransactionsFromCategory(primaryStage)
+end note
+UI-->-User:
+
+Menotapahtuman muokkaaminen:
+
+participant User
+participant UI
+participant budgetService
+participant categoryDao
+participant category
+participant transactionDao 
+participant transaction
+User->+UI: click edit
+UI->UI: getTransactionForm(primaryStage, \n "editTransaction", transaction) \n\nprimaryStage.setScene(\neditTransactionScene) 
+UI->+budgetService: listExpenseCategories()
+budgetService->+categoryDao: listAll()
+categoryDao->*category: new Category(id, name,\n incomeCategory)
+categoryDao-->-budgetService: List<Category>
+budgetService->budgetService: keep if not incomeCategory
+budgetService-->-UI: List<Category>
+UI->UI: sets expense category list \non the form combo box field
+UI->+transaction: getDescription(), getAmount(), getDate(), getCategory()
+transaction-->-UI: description, amount, date, category
+UI->UI: sets description, amount*(-1), date and \ncategory in form fields
+UI-->-User:
+User->+UI: click save
+UI->UI: validates form fields
+UI->+budgetService:editExpenseTransaction(\ntransaction, category, \ndescription, amount, date)
+budgetService->transaction: setCategory(category), setDescription(), setAmount(amount*(-1)), setDate(date)
+budgetService->+transactionDao: update(transaction)
+transactionDao-->-budgetService: transaction
+budgetService-->-UI: 
+UI->UI: updates, \nprimaryStage.setScene(primaryScene)
+note left of UI
+updates:
+listCategories(primaryStage)
+updateSituation()
+listTransactions(primaryStage) / 
+listTransactionsFromCategory(\nprimaryStage)
+end note
+UI-->-User:
