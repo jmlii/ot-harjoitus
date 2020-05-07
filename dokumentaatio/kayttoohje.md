@@ -20,7 +20,7 @@ java -jar BudgetApp-X.X.jar
 , jossa X.X viittaa koneelle ladatun tiedoston nimessä oleviin numeroihin. Oletustietokantaa käyttämällä ohjelma luo käynnistämisen yhteydessä käynnistyshakemistoon tietokantatiedoston, jos sitä ei vielä ollut olemassa. Tätä tiedostoa ei tule poistaa, jos haluaa vielä käyttää käytön aikana tallentamiaan tietoja. Jos tiedot saa hävittää, niin tietokantatiedoston voi poistaa. Jos tietokantatiedoston on poistanut, niin ohjelma luo sen seuraavalla käynnistyskerralla uudelleen.
 
 ## Aloitusnäkymä
-Sovellus avautuu näkymään, jossa käyttäjä näkee taloutensa kirjatut tulot, menot ja näiden tasapainon, sekä tapahtumien summat tapahtumakategorioittain. Kategorioiden kohdalta voi siirtyä tarkastelemaan kyseisen kategorian tapahtumia. Sovelluksen ylälaidassa on valikko, josta käyttäjä voi siirtyä kirjaamaan uuden tulon tai menon, tarkastelemaan kaikkia tapahtumia, tai exit-painikkeesta lopettaa ohjelman käytön. 
+Sovellus avautuu näkymään, jossa käyttäjä näkee taloutensa kirjatut tulot, menot ja näiden tasapainon, sekä tapahtumien summat tapahtumakategorioittain listana ja menotapahtumien summien jakautumisen kategorioihin piiraskaaviona. Siirtämällä hiiren piiraskaavion lohkon päälle näkee kyseisen kategorian nimen ja prosenttiosuuden kokonaismenoista. Kategorialistassa kategorioiden kohdalta voi siirtyä tarkastelemaan kyseisen kategorian tapahtumia. Sovelluksen ylälaidassa on valikko, josta käyttäjä voi siirtyä kirjaamaan uuden tulon tai menon, tarkastelemaan kaikkia tapahtumia, tai exit-painikkeesta lopettaa ohjelman käytön. 
 
 Sovelluksen aloitusnäkymä ensimmäisellä käynnistyskerralla, tai jos käyttäjä ei ole tallentanut sovellukseen mitään tietoja:
 
@@ -30,11 +30,15 @@ Sovelluksen aloitusnäkymä, kun sovellukseen on tallennettu tapahtumia:
 
 ![](kuvat/budgetapp_home_with_transactions.jpg)
 
-## Tapahtumat kategorioittain
-Aloitusnäkymän oikeassa laidassa on listaus tapahtumakategorioista, ja kategorioittain summa koko kategorian tapahtumien arvosta. View-painikkeesta voi siirtyä tarkastelemaan halutun kategorian tapahtumia.
+Menojen jakautumista kuvaavan piiraskaavion päällä näytettävä kuvaus kategoriasta ja sen osuudesta kokonaismenoista:
+
+![](kuvat/budgetapp_home_piechart_tooltip.jpg)
 
 ## Tulojen ja menojen summat ja talouden tasapaino
-Aloitusnäkymän vasemmassa laidassa voi tarkastella talouden tasapainoa eli tulojen ja menojen välistä suhdetta, sekä kaikkien tulojen yhteenlaskettua arvoa ja kaikkien menojen yhteenlaskettua arvoa. 
+Aloitusnäkymän vasemmassa laidassa voi tarkastella talouden tasapainoa eli tulojen ja menojen välistä suhdetta, sekä kaikkien tulojen yhteenlaskettua arvoa ja kaikkien menojen yhteenlaskettua arvoa. Tasapainoa kuvaava teksti ("balance") ja summa näkyvät vihreinä, jos talous on plussalla, ja punaisella, jos talous on miinuksella. Jos tuloja ja menoja ei ole lainkaan tai niitä on yhtä paljon, näkyy teksti sovelluksen fonttien perusvärillä (tämä voi vaihdella eri järjestelmissä, yleensä musta tai tummanharmaa). 
+
+## Tapahtumat kategorioittain
+Aloitusnäkymän oikeassa laidassa on listaus tapahtumakategorioista, ja kategorioittain summa koko kategorian tapahtumien arvosta. View-painikkeesta voi siirtyä tarkastelemaan halutun kategorian tapahtumia. Näkymä on vastaava kuin [tapahtumalistauksessa](#tapahtumalistaus), mutta sisältää vain yhden kategorian tapahtumat.
 
 ## Uuden tulon tai menon lisääminen
 Käyttäjä voi siirtyä kirjaamaan uuden tulon New income -painikkeesta, tai uuden menon New expense -painikkeesta. Painikkeista avautuu tietojensyöttölomake.
@@ -45,7 +49,7 @@ Tulon lisääminen:
 
 ![](kuvat/budgetapp_new_income.jpg)
 
-Menon lisääminen muistuttaa tulon lisäämistä, mutta menolle valitaan lisäksi kulukategoria Category-kohdan pudotusvalikosta. Ohjelmassa on valmiina 13 määriteltyä kulukategoriaa kattamaan tyypillisiä menoja. Menon arvo annetaan positiivisena kokonaislukuna, mutta ohjelma käsittelee sen tapahtumalistauksiinsa negatiiviseksi luvuksi.  
+Menon lisääminen muistuttaa tulon lisäämistä, mutta menolle valitaan lisäksi kulukategoria Category-kohdan pudotusvalikosta. Ohjelmassa on valmiina 12 määriteltyä kulukategoriaa kattamaan tyypillisiä menoja. Menon arvo annetaan positiivisena kokonaislukuna, mutta ohjelma käsittelee sen tapahtumalistauksiinsa negatiiviseksi luvuksi.  
 
 Menon lisääminen:
 
